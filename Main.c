@@ -36,7 +36,7 @@ void imprime_pares(ListaEncadeada *a, ListaEncadeada *b) {
 }
 
 int main(void) {
-	printf("PPH - ALGORITMO 1\n");
+	printf("PPH\n");
 
 	int a0 = 132;
 	int b0 = 434;
@@ -46,6 +46,9 @@ int main(void) {
 	printf("S = ");
 	imprime_pares_ab(a, b, 4);
 	printf("\n");
+
+
+	printf("\nALGORITMO 1\n");
 
 	ListaEncadeada *Sa = inicializar_lista();
 	ListaEncadeada *Sb = inicializar_lista();
@@ -59,4 +62,22 @@ int main(void) {
 	desalocar_lista(Sa);
 	desalocar_lista(Sb);
 	printf("\n");
+
+
+	printf("\nALGORITMO 2\n");
+
+	Sa = inicializar_lista();
+	Sb = inicializar_lista();
+	r = pph_algoritmo2(a0, b0, 4, a, b, Sa, Sb);
+	R = calcula_R(a0, b0, Sa, Sb);
+
+	printf("r = %f, R = %f\n", r, R);
+	printf("S* = ");
+	imprime_pares(Sa, Sb);
+
+	desalocar_lista(Sa);
+	desalocar_lista(Sb);
+	printf("\n");
+
+	return 0;
 }
