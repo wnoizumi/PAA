@@ -6,6 +6,7 @@
  */
 
 #include <stdlib.h>
+#include "MergeSort.h"
 
 void merge(int *esquerda, int tam_esq, int *direita, int tam_dir, int *resultado) {
 	int i_esq = 0;

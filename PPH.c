@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "PPH.h"
 #include "ListaEncadeada.h"
+#include "MergeSort.h"
 
 double calcula_R(int a0, int b0, ListaEncadeada *Sa, ListaEncadeada *Sb) {
 	int somaA = a0;
