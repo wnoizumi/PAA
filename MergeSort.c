@@ -59,7 +59,7 @@ void merge_sort(ListaEncadeada *l, int n) {
 	}
 }
 
-/* CÓDIGO DE TESTE*/
+/* CÓDIGO DE TESTE
 #include <stdio.h>
 
 void imprime(ListaEncadeada *a) {
@@ -99,4 +99,4 @@ int main(void) {
 
 	return 0;
 }
-/**/
+*/
