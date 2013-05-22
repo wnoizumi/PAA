@@ -121,3 +121,40 @@ double pph_algoritmo2(int a0, int b0, int n, int *a, int *b, ListaEncadeada *S) 
 	}
 	return R;
 }
+
+// Primeira chamada: pph_alg4(a0, b0, n, a, b, a0/b0, 0);
+double pph_algoritmo4(int a0, int b0, int n, int *a, int *b, double R, int indiceInicial) {
+
+	int p_inicio = indiceInicial;
+	int p_fim = n - 1;
+
+	while (p_inicio < p_fim) {
+		double r = ((double) *(a + p_inicio)) / *(b + p_inicio);
+		if (r > R) {
+			int temp;
+			temp = *(a + p_fim);
+			*(a + p_fim) = *(a + p_inicio);
+			*(a + p_inicio) = temp;
+			temp = *(b + p_fim);
+			*(b + p_fim) = *(b + p_inicio);
+			*(b + p_inicio) = temp;
+			p_fim--;
+		} else {
+			p_inicio++;
+		}
+	}
+
+	if (p_inicio == indiceInicial) {
+		return R;
+	} else {
+		int somaA = a0;
+		int somaB = b0;
+		for (int i = p_inicio; i < n; i++) {
+			somaA = somaA + *(a + i);
+			somaB = somaB + *(b + i);
+		}
+		double r = ((double) somaA) / somaB;
+
+		return pph_algoritmo4(a0, b0, n, a, b, r, p_inicio);
+	}
+}

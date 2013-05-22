@@ -74,5 +74,18 @@ int main(void) {
 	desalocar_lista(S);
 	printf("\n");
 
+
+	printf("\nALGORITMO 4\n");
+
+	r = pph_algoritmo4(a0, b0, 4, a, b, (((double) a0) / b0), 0);
+//	R = calcula_R(a0, b0, S);
+
+	printf("R = %f\n", r);
+//	printf("S* = ");
+//	imprime_pares(S);
+
+//	desalocar_lista(S);
+	printf("\n");
+
 	return 0;
 }

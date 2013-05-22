@@ -16,5 +16,7 @@ double pph_algoritmo1(int a0, int b0, int n, int *a, int *b, ListaEncadeada *S);
 
 double pph_algoritmo2(int a0, int b0, int n, int *a, int *b, ListaEncadeada *S);
 
+double pph_algoritmo4(int a0, int b0, int n, int *a, int *b, double R, int indiceInicial);
+
 
 #endif /* PPH_H_ */
