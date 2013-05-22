@@ -22,20 +22,19 @@ void imprime_pares_ab(int *a, int *b, int n) {
 	printf(" }");
 }
 
-void imprime_pares(ListaEncadeada *a, ListaEncadeada *b) {
+void imprime_pares(ListaEncadeada *l) {
 	printf("{");
-	while ((a->proximo != NULL) && (b->proximo != NULL)) {
-		if (a->anterior != NULL) {
+	while (l->proximo != NULL) {
+		if (l->anterior != NULL) {
 			printf(",");
 		}
-		a = a->proximo;
-		b = b->proximo;
-		printf(" (%d, %d)", a->valor.a, b->valor.b);
+		l = l->proximo;
+		printf(" (%d, %d)", l->valor.a, l->valor.b);
 	}
 	printf(" }");
 }
 
-int xmain(void) {
+int main(void) {
 	printf("PPH\n");
 
 	int a0 = 132;
@@ -50,33 +49,29 @@ int xmain(void) {
 
 	printf("\nALGORITMO 1\n");
 
-	ListaEncadeada *Sa = inicializar_lista();
-	ListaEncadeada *Sb = inicializar_lista();
-	double r = pph_algoritmo1(a0, b0, 4, a, b, Sa, Sb);
-	double R = calcula_R(a0, b0, Sa, Sb);
+	ListaEncadeada *S = inicializar_lista();
+	double r = pph_algoritmo1(a0, b0, 4, a, b, S);
+	double R = calcula_R(a0, b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
 	printf("S* = ");
-	imprime_pares(Sa, Sb);
+	imprime_pares(S);
 
-	desalocar_lista(Sa);
-	desalocar_lista(Sb);
+	desalocar_lista(S);
 	printf("\n");
 
 
 	printf("\nALGORITMO 2\n");
 
-	Sa = inicializar_lista();
-	Sb = inicializar_lista();
-	r = pph_algoritmo2(a0, b0, 4, a, b, Sa, Sb);
-	R = calcula_R(a0, b0, Sa, Sb);
+	S = inicializar_lista();
+	r = pph_algoritmo2(a0, b0, 4, a, b, S);
+	R = calcula_R(a0, b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
 	printf("S* = ");
-	imprime_pares(Sa, Sb);
+	imprime_pares(S);
 
-	desalocar_lista(Sa);
-	desalocar_lista(Sb);
+	desalocar_lista(S);
 	printf("\n");
 
 	return 0;

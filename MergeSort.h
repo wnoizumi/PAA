@@ -8,6 +8,8 @@
 #ifndef MERGESORT_H_
 #define MERGESORT_H_
 
-void merge_sort(int *l, int n);
+#include "ListaEncadeada.h"
+
+void merge_sort(ListaEncadeada *l, int n);
 
 #endif /* MERGESORT_H_ */
