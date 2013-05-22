@@ -17,7 +17,7 @@ void merge(ListaEncadeada *esquerda, ListaEncadeada *direita, ListaEncadeada *re
 		if ((p_esq != NULL) && (p_dir != NULL)) {
 			double r_esq = ((double)p_esq->valor.a) / p_esq->valor.b;
 			double r_dir = ((double)p_dir->valor.a) / p_dir->valor.b;
-			if (r_esq <= r_dir) {
+			if (r_esq >= r_dir) {
 				p_resultado = inserir_depois_de(p_resultado, p_esq->valor.a, p_esq->valor.b);
 				p_esq = p_esq->proximo;
 			}
@@ -59,7 +59,7 @@ void merge_sort(ListaEncadeada *l, int n) {
 	}
 }
 
-/* CÓDIGO DE TESTE
+/* CÓDIGO DE TESTE*/
 #include <stdio.h>
 
 void imprime(ListaEncadeada *a) {
@@ -99,4 +99,4 @@ int main(void) {
 
 	return 0;
 }
-*/
+/**/
