@@ -68,35 +68,45 @@ void merge_sort_int(int *l, int n) {
 }
 
 void merge_pares(ListaEncadeada *esquerda, int tam_esq, ListaEncadeada *direita, int tam_dir, ListaEncadeada *resultado) {
-	int i_esq = 0;
-	int i_dir = 0;
-	int i_resultado = 0;
-	while ((i_esq < tam_esq) || (i_dir < tam_dir)) {
-		if ((i_esq < tam_esq) && (i_dir < tam_dir)) {
-			ListaEncadeada *primeiro_esquerda = esquerda + i_esq;
-			ListaEncadeada *primeiro_direita = direita + i_esq;
+//	int i_esq = 0;
+//	int i_dir = 0;
+//	int i_resultado = 0;
+	ListaEncadeada *p_esq = esquerda->proximo;
+	ListaEncadeada *p_dir = direita->proximo;
+	ListaEncadeada *p_resultado = resultado;
+	while ((p_esq != NULL) || (p_dir != NULL)) {
+		if ((p_esq != NULL) && (p_dir != NULL)) {
+			ListaEncadeada *primeiro_esquerda = p_esq;
+			ListaEncadeada *primeiro_direita = p_dir;
 			double r_esq = ((double)primeiro_esquerda->valor.a) / primeiro_esquerda->valor.b;
 			double r_dir = ((double)primeiro_direita->valor.a) / primeiro_direita->valor.b;
 			if (r_esq <= r_dir) {
-				*(resultado + i_resultado) = *(esquerda + i_esq);
-				i_esq = i_esq + 1;
-				i_resultado = i_resultado + 1;
+				p_resultado = inserir_depois_de(p_resultado, p_esq->valor.a, p_esq->valor.b);
+				p_esq = p_esq->proximo;
+//				i_esq = i_esq + 1;
+//				i_resultado = i_resultado + 1;
 			}
 			else {
-				*(resultado + i_resultado) = *(direita + i_dir);
-				i_dir = i_dir + 1;
-				i_resultado = i_resultado + 1;
+				p_resultado = inserir_depois_de(p_resultado, p_dir->valor.a, p_dir->valor.b);
+				p_dir = p_dir->proximo;
+//				*(resultado + i_resultado) = *(direita + i_dir);
+//				i_dir = i_dir + 1;
+//				i_resultado = i_resultado + 1;
 			}
 		} else {
-			if (i_esq < tam_esq) {
-				*(resultado + i_resultado) = *(esquerda + i_esq);
-				i_esq = i_esq + 1;
-				i_resultado = i_resultado + 1;
+			if (p_esq != NULL) {
+				p_resultado = inserir_depois_de(p_resultado, p_esq->valor.a, p_esq->valor.b);
+				p_esq = p_esq->proximo;
+//				*(resultado + i_resultado) = *(esquerda + i_esq);
+//				i_esq = i_esq + 1;
+//				i_resultado = i_resultado + 1;
 			} else {
-				if (i_dir < tam_dir) {
-					*(resultado + i_resultado) = *(direita + i_dir);
-					i_dir = i_dir + 1;
-					i_resultado = i_resultado + 1;
+				if (p_dir != NULL) {
+					p_resultado = inserir_depois_de(p_resultado, p_dir->valor.a, p_dir->valor.b);
+					p_dir = p_dir->proximo;
+//					*(resultado + i_resultado) = *(direita + i_dir);
+//					i_dir = i_dir + 1;
+//					i_resultado = i_resultado + 1;
 				}
 			}
 		}
@@ -143,10 +153,11 @@ void imprime(ListaEncadeada *a) {
 		if (a->anterior != NULL ) {
 			printf(",");
 		}
+		printf("\n\t");
 		a = a->proximo;
-		printf(" (a = %d, b = %d, r = %f)", a->valor.a, a->valor.b, ((double)a->valor.a) / a->valor.b);
+		printf(" (a = %8d, b = %8d, r = %14.6f)", a->valor.a, a->valor.b, ((double)a->valor.a) / a->valor.b);
 	}
-	printf(" }");
+	printf("\n    }");
 }
 
 int main(void) {
