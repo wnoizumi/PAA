@@ -106,17 +106,17 @@ double pph_algoritmo2(int a0, int b0, int n, int *a, int *b, ListaEncadeada *S) 
 			R = calcula_R(a0, b0, S);
 
 			// "... e repete o teste."
-			ListaEncadeada *x = S;
-			while (x->proximo != NULL) {
-				x = x->proximo;
-				double r = ((double) (x->valor.a)) / x->valor.b;
-				// "... Se existir um elemento em S que não satisfaz
-				//  as condições do lema..."
-				if (r < R) {
-					// "... este elemento deve ser removido."
-					x = remover(x);
-				}
-			}
+//			ListaEncadeada *x = S;
+//			while (x->proximo != NULL) {
+//				x = x->proximo;
+//				double r = ((double) (x->valor.a)) / x->valor.b;
+//				// "... Se existir um elemento em S que não satisfaz
+//				//  as condições do lema..."
+//				if (r < R) {
+//					// "... este elemento deve ser removido."
+//					x = remover(x);
+//				}
+//			}
 		}
 	}
 	return R;
