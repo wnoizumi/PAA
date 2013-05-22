@@ -18,8 +18,8 @@ double calcula_R(int a0, int b0, ListaEncadeada *Sa, ListaEncadeada *Sb) {
 	while ((Sa->proximo != NULL) && (Sb->proximo != NULL)) {
 		Sa = Sa->proximo;
 		Sb = Sb->proximo;
-		somaA = somaA + Sa->valor;
-		somaB = somaB + Sb->valor;
+		somaA = somaA + Sa->valor.a;
+		somaB = somaB + Sb->valor.b;
 	}
 
 	return ((double) somaA) / somaB;
@@ -44,8 +44,8 @@ double pph_algoritmo1(int a0, int b0, int n, int *a, int *b, ListaEncadeada *Sa,
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
-			SAk = inserir_depois_de(SAk, ak);
-			SBk = inserir_depois_de(SBk, bk);
+			SAk = inserir_depois_de(SAk, ak, bk);
+			SBk = inserir_depois_de(SBk, ak, bk);
 
 			sizeS = sizeS + 1;
 			// "... atualiza o valor de R... "
@@ -54,16 +54,16 @@ double pph_algoritmo1(int a0, int b0, int n, int *a, int *b, ListaEncadeada *Sa,
 			// "... e repete o teste."
 			ListaEncadeada *ax = Sa;
 			ListaEncadeada *bx = Sb;
-			while ((ax->proximo != NULL )&& (bx->proximo != NULL)) {
+			while ((ax->proximo != NULL) && (bx->proximo != NULL)) {
 				ax = ax->proximo;
 				bx = bx->proximo;
-				double r = ((double) (ax->valor)) / bx->valor;
+				double r = ((double) (ax->valor.a)) / bx->valor.b;
 				// "... Se existir um elemento em S que não satisfaz
 				//  as condições do lema..."
 				if (r < R) {
 					// "... este elemento deve ser removido."
-					ax=remover(ax);
-					bx=remover(bx);
+					ax = remover(ax);
+					bx = remover(bx);
 				}
 			}
 		}
@@ -94,8 +94,8 @@ double pph_algoritmo2(int a0, int b0, int n, int *a, int *b, ListaEncadeada *Sa,
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
-			SAk = inserir_depois_de(SAk, ak);
-			SBk = inserir_depois_de(SBk, bk);
+			SAk = inserir_depois_de(SAk, ak, bk);
+			SBk = inserir_depois_de(SBk, ak, bk);
 
 			sizeS = sizeS + 1;
 			// "... atualiza o valor de R... "
@@ -104,16 +104,16 @@ double pph_algoritmo2(int a0, int b0, int n, int *a, int *b, ListaEncadeada *Sa,
 			// "... e repete o teste."
 			ListaEncadeada *ax = Sa;
 			ListaEncadeada *bx = Sb;
-			while ((ax->proximo != NULL )&& (bx->proximo != NULL)) {
+			while ((ax->proximo != NULL) && (bx->proximo != NULL)) {
 				ax = ax->proximo;
 				bx = bx->proximo;
-				double r = ((double) (ax->valor)) / bx->valor;
+				double r = ((double) (ax->valor.a)) / bx->valor.b;
 				// "... Se existir um elemento em S que não satisfaz
 				//  as condições do lema..."
 				if (r < R) {
 					// "... este elemento deve ser removido."
-					ax=remover(ax);
-					bx=remover(bx);
+					ax = remover(ax);
+					bx = remover(bx);
 				}
 			}
 		}

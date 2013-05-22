@@ -30,12 +30,12 @@ void imprime_pares(ListaEncadeada *a, ListaEncadeada *b) {
 		}
 		a = a->proximo;
 		b = b->proximo;
-		printf(" (%d, %d)", a->valor, b->valor);
+		printf(" (%d, %d)", a->valor.a, b->valor.b);
 	}
 	printf(" }");
 }
 
-int main(void) {
+int xmain(void) {
 	printf("PPH\n");
 
 	int a0 = 132;
