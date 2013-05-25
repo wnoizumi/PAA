@@ -8,17 +8,12 @@
 #ifndef LISTAENCADEADA_H_
 #define LISTAENCADEADA_H_
 
+#include "ParOrdenado.h"
 
-struct PAR_ORDENADO {
-	int a;
-	int b;
-};
-
-typedef struct PAR_ORDENADO ParOrdenado;
 
 struct ELEMENTO_LISTA_ENCADEADA {
 	struct ELEMENTO_LISTA_ENCADEADA *anterior;
-	ParOrdenado valor;
+	ParOrdenado *valor;
 	struct ELEMENTO_LISTA_ENCADEADA *proximo;
 };
 
@@ -26,13 +21,13 @@ typedef struct ELEMENTO_LISTA_ENCADEADA ListaEncadeada;
 
 ListaEncadeada* inicializar_lista();
 
-ListaEncadeada* inserir_depois_de(ListaEncadeada *anterior, int a, int b);
+ListaEncadeada* inserir_depois_de(ListaEncadeada *anterior, ParOrdenado *ab);
 
 ListaEncadeada* remover(ListaEncadeada *elemento);
 
 void desalocar_lista(ListaEncadeada *elementoInicial);
 
-void dividir_lista(ListaEncadeada *listaOriginal, int tamanhoListaOriginal, ListaEncadeada *esquerda, ListaEncadeada *direita);
+//void dividir_lista(ListaEncadeada *listaOriginal, int tamanhoListaOriginal, ListaEncadeada *esquerda, ListaEncadeada *direita);
 
 
 #endif /* LISTAENCADEADA_H_ */

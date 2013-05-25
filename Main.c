@@ -11,13 +11,13 @@
 #include "ListaEncadeada.h"
 #include "PPH.h"
 
-void imprime_pares_ab(int *a, int *b, int n) {
+void imprime_pares_ab(ParOrdenado *ab, int n) {
 	printf("{");
 	for (int i = 0; i < n; i++) {
 		if (i > 0) {
 			printf(",");
 		}
-		printf(" (%d, %d)", *(a+i), *(b+i));
+		printf(" (%d, %d)", (ab + i)->a, (ab + i)->b);
 	}
 	printf(" }");
 }
@@ -29,7 +29,7 @@ void imprime_pares(ListaEncadeada *l) {
 			printf(",");
 		}
 		l = l->proximo;
-		printf(" (%d, %d)", l->valor.a, l->valor.b);
+		printf(" (%d, %d)", l->valor->a, l->valor->b);
 	}
 	printf(" }");
 }
@@ -37,21 +37,27 @@ void imprime_pares(ListaEncadeada *l) {
 int main(void) {
 	printf("PPH\n");
 
-	int a0 = 132;
-	int b0 = 434;
+	ParOrdenado *a0b0 = malloc(sizeof(ParOrdenado));
+	a0b0->a = 132;
+	a0b0->b = 434;
+	ParOrdenado *ab = malloc(4 * sizeof(ParOrdenado));
 	int a[] = { 132, 461, 10, 130 };
 	int b[] = { 563, 874, 581, 84 };
-	printf("(a0, b0) = (%d, %d)\n", a0, b0);
+	for (int i = 0; i < 4; i++) {
+		(ab + i)->a = *(a + i);
+		(ab + i)->b = *(b + i);
+	}
+	printf("(a0, b0) = (%d, %d)\n", a0b0->a, a0b0->b);
 	printf("S = ");
-	imprime_pares_ab(a, b, 4);
+	imprime_pares_ab(ab, 4);
 	printf("\n");
 
 
 	printf("\nALGORITMO 1\n");
 
 	ListaEncadeada *S = inicializar_lista();
-	double r = pph_algoritmo1(a0, b0, 4, a, b, S);
-	double R = calcula_R(a0, b0, S);
+	double r = pph_algoritmo1(a0b0, 4, ab, S);
+	double R = calcula_R(a0b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
 	printf("S* = ");
@@ -64,8 +70,8 @@ int main(void) {
 	printf("\nALGORITMO 2\n");
 
 	S = inicializar_lista();
-	r = pph_algoritmo2(a0, b0, 4, a, b, S);
-	R = calcula_R(a0, b0, S);
+	r = pph_algoritmo2(a0b0, 4, ab, S);
+	R = calcula_R(a0b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
 	printf("S* = ");
@@ -77,7 +83,7 @@ int main(void) {
 
 	printf("\nALGORITMO 4\n");
 
-	r = pph_algoritmo4(a0, b0, 4, a, b, (((double) a0) / b0), 0);
+	r = pph_algoritmo4(a0b0, 4, ab, razao(a0b0), 0);
 //	R = calcula_R(a0, b0, S);
 
 	printf("R = %f\n", r);
@@ -86,6 +92,8 @@ int main(void) {
 
 //	desalocar_lista(S);
 	printf("\n");
+
+	free(a0b0);
 
 	return 0;
 }

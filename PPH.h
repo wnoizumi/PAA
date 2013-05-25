@@ -10,13 +10,13 @@
 
 #include "ListaEncadeada.h"
 
-double calcula_R(int a0, int b0, ListaEncadeada *S);
+double calcula_R(ParOrdenado *a0b0, ListaEncadeada *S);
 
-double pph_algoritmo1(int a0, int b0, int n, int *a, int *b, ListaEncadeada *S);
+double pph_algoritmo1(ParOrdenado *a0b0, int n, ParOrdenado *ab, ListaEncadeada *S);
 
-double pph_algoritmo2(int a0, int b0, int n, int *a, int *b, ListaEncadeada *S);
+double pph_algoritmo2(ParOrdenado *a0b0, int n, ParOrdenado *ab, ListaEncadeada *S);
 
-double pph_algoritmo4(int a0, int b0, int n, int *a, int *b, double R, int indiceInicial);
+double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int indiceInicial);
 
 
 #endif /* PPH_H_ */

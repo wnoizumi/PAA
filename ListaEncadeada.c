@@ -11,17 +11,18 @@
 ListaEncadeada* inicializar_lista() {
 	ListaEncadeada *elemento_inicial = malloc(sizeof(ListaEncadeada));
 	elemento_inicial->anterior = NULL;
-	elemento_inicial->valor.a = 0;
-	elemento_inicial->valor.b = 0;
+	elemento_inicial->valor = NULL;
 	elemento_inicial->proximo = NULL;
 
 	return elemento_inicial;
 }
 
-ListaEncadeada* inserir_depois_de(ListaEncadeada *anterior, int a, int b) {
+ListaEncadeada* inserir_depois_de(ListaEncadeada *anterior, ParOrdenado *ab) {
 	ListaEncadeada *novoElemento = malloc(sizeof(ListaEncadeada));
-	novoElemento->valor.a = a;
-	novoElemento->valor.b = b;
+	novoElemento->valor = malloc(sizeof(ParOrdenado));
+
+	novoElemento->valor->a = ab->a;
+	novoElemento->valor->b = ab->b;
 
 	anterior->proximo = novoElemento;
 	novoElemento->anterior = anterior;
@@ -40,6 +41,7 @@ ListaEncadeada* remover(ListaEncadeada *elemento) {
 		elemento->proximo->anterior = elemento->anterior;
 	}
 
+	free(elemento->valor);
 	free(elemento);
 	return proximoElemento;
 }
@@ -48,31 +50,32 @@ void desalocar_lista(ListaEncadeada *elementoInicial) {
 	while (elementoInicial->proximo != NULL ) {
 		ListaEncadeada *elemento = elementoInicial;
 		elementoInicial = elementoInicial->proximo;
+		free(elemento->valor);
 		free(elemento);
 	}
 	free(elementoInicial);
 }
 
-void dividir_lista(ListaEncadeada *listaOriginal, int tamanhoListaOriginal, ListaEncadeada *esquerda, ListaEncadeada *direita) {
-	ListaEncadeada *p = listaOriginal->proximo;
-	int i;
-	int meio = tamanhoListaOriginal / 2;
-
-	int tamanho_esquerda = meio;
-	ListaEncadeada *p_esq = esquerda;
-	i = 0;
-	while ((i < tamanho_esquerda) && (p != NULL)) {
-		p_esq = inserir_depois_de(p_esq, p->valor.a, p->valor.b);
-		i++;
-		p = p->proximo;
-	}
-
-	int tamanho_direita = tamanhoListaOriginal - meio;
-	ListaEncadeada *p_dir = direita;
-	i = 0;
-	while ((i < tamanho_direita) && (p != NULL)) {
-		p_dir = inserir_depois_de(p_dir, p->valor.a, p->valor.b);
-		i++;
-		p = p->proximo;
-	}
-}
+//void dividir_lista(ListaEncadeada *listaOriginal, int tamanhoListaOriginal, ListaEncadeada *esquerda, ListaEncadeada *direita) {
+//	ListaEncadeada *p = listaOriginal;
+//	int i;
+//	int meio = tamanhoListaOriginal / 2;
+//
+//	int tamanho_esquerda = meio;
+//	ListaEncadeada *p_esq = esquerda;
+//	i = 0;
+//	while ((i < tamanho_esquerda) && (p->proximo != NULL)) {
+//		p = p->proximo;
+//		p_esq = inserir_depois_de(p_esq, p->valor);
+//		i++;
+//	}
+//
+//	int tamanho_direita = tamanhoListaOriginal - meio;
+//	ListaEncadeada *p_dir = direita;
+//	i = 0;
+//	while ((i < tamanho_direita) && (p->proximo != NULL)) {
+//		p = p->proximo;
+//		p_dir = inserir_depois_de(p_dir, p->valor);
+//		i++;
+//	}
+//}
