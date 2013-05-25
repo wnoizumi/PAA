@@ -8,67 +8,6 @@
 #include <stdlib.h>
 #include "MergeSort.h"
 #include "ParOrdenado.h"
-#include "ListaEncadeada.h"
-
-void old_merge(ListaEncadeada *esquerda, ListaEncadeada *direita, ListaEncadeada *resultado) {
-	ListaEncadeada *p_esq = esquerda->proximo;
-	ListaEncadeada *p_dir = direita->proximo;
-	ListaEncadeada *p_resultado = resultado;
-	while ((p_esq != NULL) || (p_dir != NULL)) {
-		if ((p_esq != NULL) && (p_dir != NULL)) {
-			double r_esq = razao(p_esq->valor);
-			double r_dir = razao(p_dir->valor);
-			if (r_esq >= r_dir) {
-				p_resultado = inserir_depois_de(p_resultado, p_esq->valor);
-				p_esq = p_esq->proximo;
-			}
-			else {
-				p_resultado = inserir_depois_de(p_resultado, p_dir->valor);
-				p_dir = p_dir->proximo;
-			}
-		} else {
-			if (p_esq != NULL) {
-				p_resultado = inserir_depois_de(p_resultado, p_esq->valor);
-				p_esq = p_esq->proximo;
-			} else {
-				if (p_dir != NULL) {
-					p_resultado = inserir_depois_de(p_resultado, p_dir->valor);
-					p_dir = p_dir->proximo;
-				}
-			}
-		}
-	}
-}
-
-void old_merge_sort(ListaEncadeada *l, int n) {
-	if (n > 1) {
-		int meio = n / 2;
-		int tamanho_esquerda = meio;
-		int tamanho_direita = n - meio;
-
-		ListaEncadeada *esquerda = inicializar_lista();
-		ListaEncadeada *direita = inicializar_lista();
-//		dividir_lista(l, n, esquerda, direita);
-
-		old_merge_sort(esquerda, tamanho_esquerda);
-		old_merge_sort(direita, tamanho_direita);
-
-		ListaEncadeada *listaOrdenada = inicializar_lista();
-		old_merge(esquerda, direita, listaOrdenada);
-
-		// Troca os ponteiros iniciais de l (a lista original) e listaOrdenada,
-		// de forma que a função chamadora tenha um ponteiro para a lista ordenada.
-		ListaEncadeada *temp = listaOrdenada->proximo;
-		listaOrdenada->proximo = l->proximo;
-		listaOrdenada->proximo->anterior = listaOrdenada;
-		l->proximo = temp;
-		l->proximo->anterior = l;
-
-		desalocar_lista(esquerda);
-		desalocar_lista(direita);
-		desalocar_lista(listaOrdenada);
-	}
-}
 
 void merge(ParOrdenado *esquerda, int tam_esq, ParOrdenado *direita, int tam_dir, ParOrdenado *resultado) {
 	ParOrdenado *p_esq = esquerda;
@@ -161,69 +100,48 @@ void merge_sort(ParOrdenado *l, int n) {
 		merge_sort(esquerda, tamanho_esquerda);
 		merge_sort(direita, tamanho_direita);
 
-//		ParOrdenado *listaOrdenada = malloc(n * sizeof(ParOrdenado));
 		merge(esquerda, tamanho_esquerda, direita, tamanho_direita, l);
-
-		// Troca os ponteiros iniciais de l (a lista original) e listaOrdenada,
-		// de forma que a função chamadora tenha um ponteiro para a lista ordenada.
-//		ListaEncadeada *temp = listaOrdenada->proximo;
-//		listaOrdenada->proximo = l->proximo;
-//		listaOrdenada->proximo->anterior = listaOrdenada;
-//		l->proximo = temp;
-//		l->proximo->anterior = l;
 
 		free(esquerda);
 		free(direita);
-//		desalocar_lista(listaOrdenada);
 	}
 }
 
 /* CÓDIGO DE TESTE
 #include <stdio.h>
 
-void imprime(ListaEncadeada *a) {
+void imprime(ParOrdenado *ab, int n) {
 	printf("{");
-	while (a->proximo != NULL ) {
-		if (a->anterior != NULL ) {
+	for (int i = 0; i < n; i++) {
+		if (i > 0) {
 			printf(",");
 		}
 		printf("\n\t");
-		a = a->proximo;
-		printf(" (a = %8d, b = %8d, r = %14.6f)", a->valor->a, a->valor->b, razao(a->valor));
+		ParOrdenado *aibi = ab + i;
+		printf(" (a = %8d, b = %8d, r = %14.6f)", aibi->a, aibi->b, razao(aibi));
 	}
 	printf("\n    }");
-}
-
-ListaEncadeada* inserir_valores_depois_de(ListaEncadeada *anterior, int a, int b) {
-	ParOrdenado *ab = malloc(sizeof(ParOrdenado));
-	ab->a = a;
-	ab->b = b;
-
-	ListaEncadeada *proximo = inserir_depois_de(anterior, ab);
-	free(ab);
-	return proximo;
 }
 
 int main(void) {
 	printf("TESTE DE MERGE SORT\n");
 
-	ListaEncadeada *lista = inicializar_lista();
-	ListaEncadeada *l = lista;
-	l = inserir_valores_depois_de(l, 132, 563);
-	l = inserir_valores_depois_de(l, 461, 874);
-	l = inserir_valores_depois_de(l, 10, 1232898);
-	l = inserir_valores_depois_de(l, 25938920, 84);
-	l = inserir_valores_depois_de(l, 130, 581);
+	ParOrdenado *lista = malloc(5 * sizeof(ParOrdenado));
+	(lista + 0)->a =      132; (lista + 0)->b =     563;
+	(lista + 1)->a =      461; (lista + 1)->b =     874;
+	(lista + 2)->a =       10; (lista + 2)->b = 1232898;
+	(lista + 3)->a = 25938920; (lista + 3)->b =      84;
+	(lista + 4)->a =      130; (lista + 4)->b =     581;
 
 	printf("L = ");
-	imprime(lista);
+	imprime(lista, 5);
 	printf("\n");
 
 	printf("\nMERGE SORT\n");
 
 	merge_sort(lista, 5);
 	printf("L = ");
-	imprime(lista);
+	imprime(lista, 5);
 	printf("\n");
 
 	return 0;
