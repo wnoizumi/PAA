@@ -34,29 +34,96 @@ void imprime_pares(ListaEncadeada *l) {
 	printf(" }");
 }
 
-int main(void) {
+int main(int argc, char **argv) {
 	printf("PPH\n");
 
+	int n = 0;
 	ParOrdenado *a0b0 = malloc(sizeof(ParOrdenado));
-	a0b0->a = 132;
-	a0b0->b = 434;
-	ParOrdenado *ab = malloc(4 * sizeof(ParOrdenado));
-	int a[] = { 132, 461, 10, 130 };
-	int b[] = { 563, 874, 581, 84 };
-	for (int i = 0; i < 4; i++) {
-		(ab + i)->a = *(a + i);
-		(ab + i)->b = *(b + i);
+	ParOrdenado *ab = NULL;
+
+	if (argc == 2) {
+		char *nomeArquivo = argv[1];
+		FILE *arquivo = NULL;
+		arquivo = fopen(nomeArquivo, "r");
+		if (arquivo == NULL) {
+			printf("Não foi possível abrir \"%s\".\n", nomeArquivo);
+			return EXIT_FAILURE;
+		}
+
+		int eof;
+		eof = !fscanf(arquivo, "%d\n", &n);
+		if (eof) {
+			printf("O arquivo \"%s\" está vazio.\n", nomeArquivo);
+			free(a0b0);
+			fclose(arquivo);
+			return EXIT_FAILURE;
+		}
+
+		ab = malloc(n * sizeof(ParOrdenado));
+
+		eof = !fscanf(arquivo, "%d\n", &a0b0->a);
+		if (eof) {
+			printf("O arquivo \"%s\" está incompleto.\n", nomeArquivo);
+			free(a0b0);
+			free(ab);
+			fclose(arquivo);
+			return EXIT_FAILURE;
+		}
+		for (int i = 0; i < n; i++) {
+			eof = !fscanf(arquivo, "%d\n", &(ab + i)->a);
+			if (eof) {
+				printf("O arquivo \"%s\" está incompleto.\n", nomeArquivo);
+				free(a0b0);
+				free(ab);
+				fclose(arquivo);
+				return EXIT_FAILURE;
+			}
+		}
+
+		eof = !fscanf(arquivo, "%d\n", &a0b0->b);
+		if (eof) {
+			printf("O arquivo \"%s\" está incompleto.\n", nomeArquivo);
+			free(a0b0);
+			free(ab);
+			fclose(arquivo);
+			return EXIT_FAILURE;
+		}
+		for (int i = 0; i < n; i++) {
+			eof = !fscanf(arquivo, "%d\n", &(ab + i)->b);
+			if (eof) {
+				printf("O arquivo \"%s\" está incompleto.\n", nomeArquivo);
+				free(a0b0);
+				free(ab);
+				fclose(arquivo);
+				return EXIT_FAILURE;
+			}
+		}
+
+		fclose(arquivo);
+	} else {
+		printf("Arg 0: %s\nDemonstração:\n", argv[0]);
+		n = 4;
+		a0b0->a = 132;
+		a0b0->b = 434;
+		ab = malloc(n * sizeof(ParOrdenado));
+		int a[] = { 132, 461, 10, 130 };
+		int b[] = { 563, 874, 581, 84 };
+		for (int i = 0; i < 4; i++) {
+			ab[i].a = a[i];
+			ab[i].b = b[i];
+		}
 	}
+
 	printf("(a0, b0) = (%d, %d)\n", a0b0->a, a0b0->b);
 	printf("S = ");
-	imprime_pares_ab(ab, 4);
+	imprime_pares_ab(ab, n);
 	printf("\n");
 
 
 	printf("\nALGORITMO 1\n");
 
 	ListaEncadeada *S = inicializar_lista();
-	double r = pph_algoritmo1(a0b0, 4, ab, S);
+	double r = pph_algoritmo1(a0b0, n, ab, S);
 	double R = calcula_R(a0b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
@@ -70,7 +137,7 @@ int main(void) {
 	printf("\nALGORITMO 2\n");
 
 	S = inicializar_lista();
-	r = pph_algoritmo2(a0b0, 4, ab, S);
+	r = pph_algoritmo2(a0b0, n, ab, S);
 	R = calcula_R(a0b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
@@ -83,7 +150,7 @@ int main(void) {
 
 	printf("\nALGORITMO 4\n");
 
-	r = pph_algoritmo4(a0b0, 4, ab, razao(a0b0), 0);
+	r = pph_algoritmo4(a0b0, n, ab, razao(a0b0), 0);
 //	R = calcula_R(a0, b0, S);
 
 	printf("R = %f\n", r);
@@ -94,6 +161,6 @@ int main(void) {
 	printf("\n");
 
 	free(a0b0);
-
-	return 0;
+	free(ab);
+	return EXIT_SUCCESS;
 }
