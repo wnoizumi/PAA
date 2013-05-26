@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
 	if (argc == 2) {
 		char *nomeArquivo = argv[1];
 		FILE *arquivo = NULL;
+		printf("Lendo instâncias de \"%s\"... ", nomeArquivo);
 		arquivo = fopen(nomeArquivo, "r");
 		if (arquivo == NULL) {
 			printf("Não foi possível abrir \"%s\".\n", nomeArquivo);
@@ -100,8 +101,9 @@ int main(int argc, char **argv) {
 		}
 
 		fclose(arquivo);
+		printf("%d pares lidos.\n", n);
 	} else {
-		printf("Arg 0: %s\nDemonstração:\n", argv[0]);
+		printf("Sintaxe: PPH <nome do arquivo>\nDemonstração com instância de teste:\n");
 		n = 4;
 		a0b0->a = 132;
 		a0b0->b = 434;
@@ -114,9 +116,12 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	printf("n = %d\n", n);
 	printf("(a0, b0) = (%d, %d)\n", a0b0->a, a0b0->b);
-	printf("S = ");
-	imprime_pares_ab(ab, n);
+	if (n <= 16) {
+		printf("S = ");
+		imprime_pares_ab(ab, n);
+	}
 	printf("\n");
 
 
@@ -127,8 +132,10 @@ int main(int argc, char **argv) {
 	double R = calcula_R(a0b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
-	printf("S* = ");
-	imprime_pares(S);
+	if (n <= 16) {
+		printf("S* = ");
+		imprime_pares(S);
+	}
 
 	desalocar_lista(S);
 	printf("\n");
@@ -141,8 +148,10 @@ int main(int argc, char **argv) {
 	R = calcula_R(a0b0, S);
 
 	printf("r = %f, R = %f\n", r, R);
-	printf("S* = ");
-	imprime_pares(S);
+	if (n <= 16) {
+		printf("S* = ");
+		imprime_pares(S);
+	}
 
 	desalocar_lista(S);
 	printf("\n");
