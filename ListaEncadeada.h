@@ -1,33 +1,31 @@
 /*
  * ListaEncadeada.h
  *
- *  Created on: 19/05/2013
+ *  Created on: 26/05/2013
  *      Author: marcelo
  */
 
 #ifndef LISTAENCADEADA_H_
 #define LISTAENCADEADA_H_
 
+//#include <list>
 #include "ParOrdenado.h"
 
+//using namespace std;
 
-struct ELEMENTO_LISTA_ENCADEADA {
-	struct ELEMENTO_LISTA_ENCADEADA *anterior;
+class ListaEncadeada { //: public list<ParOrdenado> {
+public:
+	ListaEncadeada *anterior;
 	ParOrdenado *valor;
-	struct ELEMENTO_LISTA_ENCADEADA *proximo;
+	ListaEncadeada *proximo;
+
+	ListaEncadeada();
+	virtual ~ListaEncadeada();
+	ListaEncadeada* inserir_depois_de(ListaEncadeada* anterior, ParOrdenado* ab);
+	ListaEncadeada* remover(ListaEncadeada* elemento);
+	ListaEncadeada* removerProximo();
+private:
+	ListaEncadeada(ParOrdenado* ab);
 };
-
-typedef struct ELEMENTO_LISTA_ENCADEADA ListaEncadeada;
-
-ListaEncadeada* inicializar_lista();
-
-ListaEncadeada* inserir_depois_de(ListaEncadeada *anterior, ParOrdenado *ab);
-
-ListaEncadeada* remover(ListaEncadeada *elemento);
-
-void desalocar_lista(ListaEncadeada *elementoInicial);
-
-//void dividir_lista(ListaEncadeada *listaOriginal, int tamanhoListaOriginal, ListaEncadeada *esquerda, ListaEncadeada *direita);
-
 
 #endif /* LISTAENCADEADA_H_ */

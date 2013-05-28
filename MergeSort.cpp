@@ -18,8 +18,8 @@ void merge(ParOrdenado *esquerda, int tam_esq, ParOrdenado *direita, int tam_dir
 	int i_resultado = 0;
 	while ((i_esq < tam_esq) || (i_dir < tam_dir)) {
 		if ((i_esq < tam_esq) && (i_dir < tam_dir)) {
-			double r_esq = razao(p_esq);
-			double r_dir = razao(p_dir);
+			double r_esq = p_esq->razao();
+			double r_dir = p_dir->razao();
 			if (r_esq >= r_dir) {
 				p_resultado->a = p_esq->a;
 				p_resultado->b = p_esq->b;
@@ -93,17 +93,14 @@ void merge_sort(ParOrdenado *l, int n) {
 		int tamanho_esquerda = meio;
 		int tamanho_direita = n - meio;
 
-		ParOrdenado *esquerda = malloc(tamanho_esquerda * sizeof(ParOrdenado));
-		ParOrdenado *direita = malloc(tamanho_direita * sizeof(ParOrdenado));
+		ParOrdenado esquerda[tamanho_esquerda];
+		ParOrdenado direita[tamanho_direita];
 		dividir_lista(l, n, esquerda, direita);
 
 		merge_sort(esquerda, tamanho_esquerda);
 		merge_sort(direita, tamanho_direita);
 
 		merge(esquerda, tamanho_esquerda, direita, tamanho_direita, l);
-
-		free(esquerda);
-		free(direita);
 	}
 }
 

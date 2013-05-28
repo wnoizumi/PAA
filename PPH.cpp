@@ -1,77 +1,65 @@
 /*
- * PPH.c
+ * PPH.cpp
  *
- *  Created on: 19/05/2013
+ *  Created on: 26/05/2013
  *      Author: marcelo
  */
 
-#include <stdlib.h>
+#include <cstdio>
 #include "PPH.h"
-#include "ParOrdenado.h"
-#include "ListaEncadeada.h"
 #include "MergeSort.h"
 
-double calcula_R_old(int a0, int b0, ListaEncadeada *S) {
-	int somaA = a0;
-	int somaB = b0;
-
-	while (S->proximo != NULL) {
-		S = S->proximo;
-		somaA = somaA + S->valor->a;
-		somaB = somaB + S->valor->b;
-	}
-
-	return ((double) somaA) / somaB;
-}
+using namespace std;
 
 double calcula_R(ParOrdenado *a0b0, ListaEncadeada *S) {
-	ParOrdenado *soma = malloc(sizeof(ParOrdenado));
-	soma->a = a0b0->a;
-	soma->b = a0b0->b;
+	ParOrdenado soma = ParOrdenado(a0b0);
 
 	while (S->proximo != NULL) {
 		S = S->proximo;
-		soma->a = soma->a + S->valor->a;
-		soma->b = soma->b + S->valor->b;
+		soma.a = soma.a + S->valor->a;
+		soma.b = soma.b + S->valor->b;
 	}
 
-	double r = razao(soma);
-	free(soma);
+	double r = soma.razao();
 	return r;
 }
 
 double pph_algoritmo1(ParOrdenado *a0b0, int n, ParOrdenado *ab, ListaEncadeada *S) {
 
 	/* "... inicia com R = a0 / b0..." */
-	double R = razao(a0b0);
+	double R = a0b0->razao();
 	int sizeS = 0;
 	ListaEncadeada *Sk = S;
 
 	// "... testa repetidamente se existe algum par (ak, bk)
 	//  que satisfaz as condições do lema."
 	for (int k = 0; k < n; k++) {
-		ParOrdenado *abk = ab + k;
-		double r = razao(abk);
+		ParOrdenado *akbk = ab + k;
+		double r = akbk->razao();
 
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
-			Sk = inserir_depois_de(Sk, abk);
-
+			Sk = Sk->inserir_depois_de(Sk, akbk);
 			sizeS = sizeS + 1;
+
 			// "... atualiza o valor de R... "
 			R = calcula_R(a0b0, S);
 
 			// "... e repete o teste."
 			ListaEncadeada *x = S;
+			ListaEncadeada *y = NULL;
 			while (x->proximo != NULL) {
+				y = x;
 				x = x->proximo;
-				double r = razao(x->valor);
+				double r = x->valor->razao();
 				// "... Se existir um elemento em S que não satisfaz
 				//  as condições do lema..."
 				if (r < R) {
 					// "... este elemento deve ser removido."
-					x = remover(x);
+					x = y->removerProximo();
+//					x = x->remover(x);
+//					sizeS = sizeS - 1;
 				}
 			}
 		}
@@ -83,7 +71,7 @@ double pph_algoritmo1(ParOrdenado *a0b0, int n, ParOrdenado *ab, ListaEncadeada 
 double pph_algoritmo2(ParOrdenado *a0b0, int n, ParOrdenado *ab, ListaEncadeada *S) {
 
 	/* "... inicia com R = a0 / b0..." */
-	double R = razao(a0b0);
+	double R = a0b0->razao();
 	int sizeS = 0;
 
 	// Modificação com relação à primeira versão: ordena antes.
@@ -94,12 +82,12 @@ double pph_algoritmo2(ParOrdenado *a0b0, int n, ParOrdenado *ab, ListaEncadeada 
 	//  que satisfaz as condições do lema."
 	for (int k = 0; k < n; k++) {
 		ParOrdenado *abk = ab + k;
-		double r = razao(abk);
+		double r = abk->razao();
 
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
-			Sk = inserir_depois_de(Sk, abk);
+			Sk = Sk->inserir_depois_de(Sk, abk);
 
 			sizeS = sizeS + 1;
 			// "... atualiza o valor de R... "
@@ -130,11 +118,11 @@ double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int i
 
 	while (p_inicio < p_fim) {
 		ParOrdenado *apbp = ab + p_inicio;
-		double r = razao(apbp);
+		double r = apbp->razao();
 		if (r > R) {
 			ParOrdenado *ab_inicio = ab + p_inicio;
 			ParOrdenado *ab_fim = ab + p_fim;
-			ParOrdenado *temp = malloc(sizeof(ParOrdenado));
+			ParOrdenado *temp = new ParOrdenado();
 
 			temp->a = ab_fim->a;
 			temp->b = ab_fim->b;
@@ -143,7 +131,7 @@ double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int i
 			ab_inicio->a = temp->a;
 			ab_inicio->b = temp->b;
 
-			free(temp);
+			delete temp;
 			p_fim--;
 		} else {
 			p_inicio++;
@@ -153,17 +141,17 @@ double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int i
 	if (p_inicio == indiceInicial) {
 		return R;
 	} else {
-		ParOrdenado *soma = malloc(sizeof(ParOrdenado));
-		soma->a = a0b0->a;
-		soma->b = a0b0->b;
+//		ParOrdenado soma = ParOrdenado(a0b0->a, a0b0->b);
+		ParOrdenado *soma = new ParOrdenado(a0b0->a, a0b0->b);
 
 		for (int i = p_inicio; i < n; i++) {
 			soma->a = soma->a + (ab + i)->a;
 			soma->b = soma->b + (ab + i)->b;
 		}
-		double r = razao(soma);
-		free(soma);
+		double r = soma->razao();
+		delete soma;
 
 		return pph_algoritmo4(a0b0, n, ab, r, p_inicio);
 	}
 }
+

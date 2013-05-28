@@ -1,14 +1,17 @@
 /*
  * PPH.h
  *
- *  Created on: 19/05/2013
+ *  Created on: 26/05/2013
  *      Author: marcelo
  */
 
 #ifndef PPH_H_
 #define PPH_H_
 
+
+#include "ParOrdenado.h"
 #include "ListaEncadeada.h"
+
 
 double calcula_R(ParOrdenado *a0b0, ListaEncadeada *S);
 

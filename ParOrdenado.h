@@ -1,22 +1,21 @@
 /*
  * ParOrdenado.h
  *
- *  Created on: 23/05/2013
+ *  Created on: 26/05/2013
  *      Author: marcelo
  */
 
 #ifndef PARORDENADO_H_
 #define PARORDENADO_H_
 
-
-struct PAR_ORDENADO {
+class ParOrdenado {
+public:
 	int a;
 	int b;
+	ParOrdenado();
+	ParOrdenado(int valor_a, int valor_b);
+	ParOrdenado(ParOrdenado* outroPar);
+	double razao();
 };
-
-typedef struct PAR_ORDENADO ParOrdenado;
-
-double razao(ParOrdenado *ab);
-
 
 #endif /* PARORDENADO_H_ */

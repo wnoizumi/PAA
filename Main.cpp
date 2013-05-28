@@ -6,10 +6,14 @@
  */
 
 
-#include <stdlib.h>
-#include <stdio.h>
+//#include <stdlib>
+#include <cstdio>
 #include "ListaEncadeada.h"
 #include "PPH.h"
+#include "CPUTimer.h"
+
+using namespace std;
+
 
 void imprime_pares_ab(ParOrdenado *ab, int n) {
 	printf("{");
@@ -38,7 +42,7 @@ int main(int argc, char **argv) {
 	printf("PPH\n");
 
 	int n = 0;
-	ParOrdenado *a0b0 = malloc(sizeof(ParOrdenado));
+	ParOrdenado *a0b0 = new ParOrdenado();
 	ParOrdenado *ab = NULL;
 
 	if (argc == 2) {
@@ -60,7 +64,7 @@ int main(int argc, char **argv) {
 			return EXIT_FAILURE;
 		}
 
-		ab = malloc(n * sizeof(ParOrdenado));
+		ab = new ParOrdenado[n];
 
 		eof = !fscanf(arquivo, "%d\n", &a0b0->a);
 		if (eof) {
@@ -107,7 +111,7 @@ int main(int argc, char **argv) {
 		n = 4;
 		a0b0->a = 132;
 		a0b0->b = 434;
-		ab = malloc(n * sizeof(ParOrdenado));
+		ab = new ParOrdenado[n];
 		int a[] = { 132, 461, 10, 130 };
 		int b[] = { 563, 874, 581, 84 };
 		for (int i = 0; i < 4; i++) {
@@ -127,7 +131,7 @@ int main(int argc, char **argv) {
 
 	printf("\nALGORITMO 1\n");
 
-	ListaEncadeada *S = inicializar_lista();
+	ListaEncadeada *S = new ListaEncadeada();
 	double r = pph_algoritmo1(a0b0, n, ab, S);
 	double R = calcula_R(a0b0, S);
 
@@ -137,13 +141,13 @@ int main(int argc, char **argv) {
 		imprime_pares(S);
 	}
 
-	desalocar_lista(S);
+	delete S;
 	printf("\n");
 
 
 	printf("\nALGORITMO 2\n");
 
-	S = inicializar_lista();
+	S = new ListaEncadeada();
 	r = pph_algoritmo2(a0b0, n, ab, S);
 	R = calcula_R(a0b0, S);
 
@@ -153,13 +157,13 @@ int main(int argc, char **argv) {
 		imprime_pares(S);
 	}
 
-	desalocar_lista(S);
+	delete S;
 	printf("\n");
 
 
 	printf("\nALGORITMO 4\n");
 
-	r = pph_algoritmo4(a0b0, n, ab, razao(a0b0), 0);
+	r = pph_algoritmo4(a0b0, n, ab, a0b0->razao(), 0);
 //	R = calcula_R(a0, b0, S);
 
 	printf("R = %f\n", r);
@@ -169,7 +173,7 @@ int main(int argc, char **argv) {
 //	desalocar_lista(S);
 	printf("\n");
 
-	free(a0b0);
-	free(ab);
+	delete a0b0;
+	delete ab;
 	return EXIT_SUCCESS;
 }
