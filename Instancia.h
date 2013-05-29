@@ -26,6 +26,7 @@ private:
 	ParOrdenado* a0b0;
 	int n;
 	ParOrdenado* ab;
+	ListaEncadeada* Sx;
 	double pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB);
 	void insertionSort(int* I, int inf, int sup);
 	int kith(int* M, int tamanhoM, int* MIndex, int MSizeSobreDois);

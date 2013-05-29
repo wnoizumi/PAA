@@ -17,6 +17,7 @@ Instancia::Instancia(ParOrdenado* a0b0, int n, ParOrdenado* ab) {
 	this->n = n;
 	this->ab = ab;
 	this->S = new ListaEncadeada();
+	this->Sx = this->S;
 }
 
 Instancia::~Instancia() {
@@ -121,7 +122,7 @@ double Instancia::pph_algoritmo2() {
 double Instancia::pph_algoritmo3() {
 	int* I = new int[this->n];
 	for (int i = 0; i < this->n; i++) {
-		*I = i;
+		I[i] = i;
 	}
 	double r = this->pph_algoritmo3(I, 0, this->n - 1, 0, 0);
 	delete I;
@@ -167,7 +168,7 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 	} else {
 		if (mIndice >= inf+4) {
 			for(i = mIndice; i <= sup; i++) {
-				this->S->inserir(&(this->ab[I[i]]));
+				this->Sx = this->Sx->inserir(&(this->ab[I[i]]));
 			}
 			return pph_algoritmo3(I, inf, mIndice - 1, newSumA, newSumB);
 		} else {
@@ -175,12 +176,12 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 			for (i = mIndice-1; i >= inf; i--) {
 				ParOrdenado* newAB = &(this->ab[I[i]]);
 				if (newAB->razao() > R) {
-					this->S->inserir(newAB);
+					this->Sx = this->Sx->inserir(newAB);
 					newSumA += newAB->a;
 					newSumB += newAB->b;
 				}
 			}
-			return R;
+			return (newSumA + a0) / (double)(newSumB + b0);
 		}
 	}
 }
