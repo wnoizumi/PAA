@@ -11,16 +11,6 @@
 
 using namespace std;
 
-//Instancia::Instancia(int a0, int b0, int n, int* a, int* b) {
-//	this->a0 = a0;
-//	this->b0 = b0;
-//	this->n = n;
-//	this->a = a;
-//	this->b = b;
-//	this->Sa = NULL;
-//	this->Sb = NULL;
-//}
-
 Instancia::Instancia(ParOrdenado* a0b0, int n, ParOrdenado* ab) {
 	this->a0b0 = a0b0;
 	this->n = n;
@@ -40,11 +30,12 @@ Instancia::~Instancia() {
 
 double Instancia::calcula_R() {
 	ParOrdenado soma = ParOrdenado(a0b0);
+	ListaEncadeada* Si = this->S;
 
-	while (S->proximo != NULL) {
-		S = S->proximo;
-		soma.a = soma.a + S->valor->a;
-		soma.b = soma.b + S->valor->b;
+	while (Si->proximo != NULL) {
+		Si = Si->proximo;
+		soma.a = soma.a + Si->valor->a;
+		soma.b = soma.b + Si->valor->b;
 	}
 
 	double r = soma.razao();
@@ -108,30 +99,19 @@ double Instancia::pph_algoritmo2() {
 	// "... testa repetidamente se existe algum par (ak, bk)
 	//  que satisfaz as condições do lema."
 	for (int k = 0; k < n; k++) {
-		ParOrdenado *abk = ab + k;
-		double r = abk->razao();
+		ParOrdenado *akbk = ab + k;
+		double r = akbk->razao();
 
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
-			Sk = Sk->inserir_depois_de(Sk, abk);
+			Sk = Sk->inserir_depois_de(Sk, akbk);
 
 			sizeS = sizeS + 1;
 			// "... atualiza o valor de R... "
 			R = this->calcula_R();
 
-			// "... e repete o teste."
-//			ListaEncadeada *x = S;
-//			while (x->proximo != NULL) {
-//				x = x->proximo;
-//				double r = ((double) (x->valor.a)) / x->valor.b;
-//				// "... Se existir um elemento em S que não satisfaz
-//				//  as condições do lema..."
-//				if (r < R) {
-//					// "... este elemento deve ser removido."
-//					x = remover(x);
-//				}
-//			}
+			// ... e não precisa repetir o teste.
 		}
 	}
 	return R;
@@ -140,6 +120,11 @@ double Instancia::pph_algoritmo2() {
 double Instancia::pph_algoritmo3() {
 	// Não implementado ainda.
 	return -255;
+}
+
+// Primeira chamada: pph_alg4(a0, b0, n, a, b, a0/b0, 0);
+double Instancia::pph_algoritmo4() {
+	return this->pph_algoritmo4(this->a0b0, n, this->ab, this->a0b0->razao(), 0);
 }
 
 // Primeira chamada: pph_alg4(a0, b0, n, a, b, a0/b0, 0);
@@ -183,6 +168,6 @@ double Instancia::pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, doub
 		double r = soma->razao();
 		delete soma;
 
-		return pph_algoritmo4(a0b0, n, ab, r, p_inicio);
+		return pph_algoritmo4(this->a0b0, this->n, this->ab, r, p_inicio);
 	}
 }

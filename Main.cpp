@@ -10,7 +10,6 @@
 #include <cstdio>
 #include "Instancia.h"
 #include "ListaEncadeada.h"
-#include "PPH.h"
 #include "CPUTimer.h"
 
 using namespace std;
@@ -132,46 +131,47 @@ int main(int argc, char **argv) {
 
 	printf("\nALGORITMO 1\n");
 
-	ListaEncadeada *S = new ListaEncadeada();
-	double r = pph_algoritmo1(a0b0, n, ab, S);
-	double R = calcula_R(a0b0, S);
+	double r;
+	double R;
+
+	Instancia I1 = Instancia(a0b0, n, ab);
+	r = I1.pph_algoritmo1();
+	R = I1.calcula_R();
 
 	printf("r = %f, R = %f\n", r, R);
 	if (n <= 16) {
 		printf("S* = ");
-		imprime_pares(S);
+		imprime_pares(I1.S);
 	}
 
-	delete S;
 	printf("\n");
 
 
 	printf("\nALGORITMO 2\n");
 
-	S = new ListaEncadeada();
-	r = pph_algoritmo2(a0b0, n, ab, S);
-	R = calcula_R(a0b0, S);
+	Instancia I2 = Instancia(a0b0, n, ab);
+	r = I2.pph_algoritmo2();
+	R = I2.calcula_R();
 
 	printf("r = %f, R = %f\n", r, R);
 	if (n <= 16) {
 		printf("S* = ");
-		imprime_pares(S);
+		imprime_pares(I2.S);
 	}
 
-	delete S;
 	printf("\n");
 
 
 	printf("\nALGORITMO 3\n");
 
-	Instancia I = Instancia(a0b0, n, ab);
-	r = I.pph_algoritmo3();
-	R = I.calcula_R();
+	Instancia I3 = Instancia(a0b0, n, ab);
+	r = I3.pph_algoritmo3();
+	R = I3.calcula_R();
 
 	printf("r = %f, R = %f\n", r, R);
 	if (n <= 16) {
 		printf("S* = ");
-		imprime_pares(I.S);
+		imprime_pares(I3.S);
 	}
 
 	printf("\n");
@@ -179,14 +179,12 @@ int main(int argc, char **argv) {
 
 	printf("\nALGORITMO 4\n");
 
-	r = pph_algoritmo4(a0b0, n, ab, a0b0->razao(), 0);
-//	R = calcula_R(a0, b0, S);
+	Instancia I4 = Instancia(a0b0, n, ab);
+	r = I4.pph_algoritmo4();
+//	r = pph_algoritmo4(a0b0, n, ab, a0b0->razao(), 0);
 
 	printf("R = %f\n", r);
-//	printf("S* = ");
-//	imprime_pares(S);
 
-//	desalocar_lista(S);
 	printf("\n");
 
 	delete a0b0;

@@ -20,12 +20,13 @@ public:
 	double pph_algoritmo1();
 	double pph_algoritmo2();
 	double pph_algoritmo3();
-	double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int indiceInicial);
+	double pph_algoritmo4();
 	ListaEncadeada* S;
 private:
 	ParOrdenado* a0b0;
 	int n;
 	ParOrdenado* ab;
+	double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int indiceInicial);
 };
 
 #endif /* INSTANCIA_H_ */
