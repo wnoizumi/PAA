@@ -29,14 +29,14 @@ ListaEncadeada::~ListaEncadeada() {
 	delete this->valor;
 }
 
-ListaEncadeada* ListaEncadeada::inserir_depois_de(ListaEncadeada* anterior, ParOrdenado* ab) {
+ListaEncadeada* ListaEncadeada::inserir(ParOrdenado* ab) {
 	ListaEncadeada *novoElemento = new ListaEncadeada(new ParOrdenado(ab));
 
 	novoElemento->valor->a = ab->a;
 	novoElemento->valor->b = ab->b;
 
-	anterior->proximo = novoElemento;
-	novoElemento->anterior = anterior;
+	this->proximo = novoElemento;
+	novoElemento->anterior = this;
 	novoElemento->proximo = NULL;
 
 	return novoElemento;

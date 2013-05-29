@@ -58,7 +58,7 @@ double Instancia::pph_algoritmo1() {
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
-			Sk = Sk->inserir_depois_de(Sk, akbk);
+			Sk = Sk->inserir(akbk);
 			sizeS = sizeS + 1;
 
 			// "... atualiza o valor de R... "
@@ -105,7 +105,7 @@ double Instancia::pph_algoritmo2() {
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
-			Sk = Sk->inserir_depois_de(Sk, akbk);
+			Sk = Sk->inserir(akbk);
 
 			sizeS = sizeS + 1;
 			// "... atualiza o valor de R... "
