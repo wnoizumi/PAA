@@ -8,6 +8,7 @@
 
 //#include <stdlib>
 #include <cstdio>
+#include "Instancia.h"
 #include "ListaEncadeada.h"
 #include "PPH.h"
 #include "CPUTimer.h"
@@ -158,6 +159,21 @@ int main(int argc, char **argv) {
 	}
 
 	delete S;
+	printf("\n");
+
+
+	printf("\nALGORITMO 3\n");
+
+	Instancia I = Instancia(a0b0, n, ab);
+	r = I.pph_algoritmo3();
+	R = I.calcula_R();
+
+	printf("r = %f, R = %f\n", r, R);
+	if (n <= 16) {
+		printf("S* = ");
+		imprime_pares(I.S);
+	}
+
 	printf("\n");
 
 
