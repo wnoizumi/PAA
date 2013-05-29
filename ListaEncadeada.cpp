@@ -23,9 +23,6 @@ ListaEncadeada::ListaEncadeada(ParOrdenado* ab) {
 }
 
 ListaEncadeada::~ListaEncadeada() {
-//	if (this->proximo != NULL) {
-//		delete this->proximo;
-//	}
 	delete this->valor;
 }
 
@@ -40,21 +37,6 @@ ListaEncadeada* ListaEncadeada::inserir(ParOrdenado* ab) {
 	novoElemento->proximo = NULL;
 
 	return novoElemento;
-}
-
-ListaEncadeada* ListaEncadeada::remover(ListaEncadeada* elemento) {
-	ListaEncadeada *proximoElemento = elemento->proximo;
-
-	if (elemento->anterior != NULL ) {
-		elemento->anterior->proximo = elemento->proximo;
-	}
-	if (elemento->proximo != NULL ) {
-		elemento->proximo->anterior = elemento->anterior;
-	}
-
-//	delete elemento->valor;
-//	delete elemento;
-	return proximoElemento;
 }
 
 ListaEncadeada* ListaEncadeada::removerProximo() {

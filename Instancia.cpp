@@ -159,7 +159,7 @@ double Instancia::pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, doub
 		return R;
 	} else {
 //		ParOrdenado soma = ParOrdenado(a0b0->a, a0b0->b);
-		ParOrdenado *soma = new ParOrdenado(a0b0->a, a0b0->b);
+		ParOrdenado *soma = new ParOrdenado(a0b0);
 
 		for (int i = p_inicio; i < n; i++) {
 			soma->a = soma->a + (ab + i)->a;

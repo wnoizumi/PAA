@@ -13,7 +13,7 @@ public:
 	int a;
 	int b;
 	ParOrdenado();
-	ParOrdenado(int valor_a, int valor_b);
+//	ParOrdenado(int valor_a, int valor_b);
 	ParOrdenado(ParOrdenado* outroPar);
 	double razao();
 };

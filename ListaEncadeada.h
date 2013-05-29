@@ -22,7 +22,6 @@ public:
 	ListaEncadeada();
 	virtual ~ListaEncadeada();
 	ListaEncadeada* inserir(ParOrdenado* ab);
-	ListaEncadeada* remover(ListaEncadeada* elemento);
 	ListaEncadeada* removerProximo();
 private:
 	ListaEncadeada(ParOrdenado* ab);

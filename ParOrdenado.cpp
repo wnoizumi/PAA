@@ -12,11 +12,6 @@ ParOrdenado::ParOrdenado() {
 	this->b = 0;
 }
 
-ParOrdenado::ParOrdenado(int valor_a, int valor_b) {
-	this->a = valor_a;
-	this->b = valor_b;
-}
-
 ParOrdenado::ParOrdenado(ParOrdenado* outroPar) {
 	this->a = outroPar->a;
 	this->b = outroPar->b;
