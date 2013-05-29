@@ -6,6 +6,7 @@
  */
 
 #include <cstdlib>
+#include <cmath>
 #include "Instancia.h"
 #include "MergeSort.h"
 
@@ -118,9 +119,135 @@ double Instancia::pph_algoritmo2() {
 }
 
 double Instancia::pph_algoritmo3() {
-	// NÃ£o implementado ainda.
-	return -255;
+	int* I = new int[this->n];
+	for (int i = 0; i < this->n; i++) {
+		*I = i;
+	}
+	double r = this->pph_algoritmo3(I, 0, this->n - 1, 0, 0);
+	delete I;
+	return r;
 }
+
+double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB) {
+	int i = inf;
+	while (i < sup) {
+		int l = i+4;
+		if (l > sup)
+			l = sup;
+		insertionSort(I, i, l);
+		i = i + 5;
+	}
+
+	int MSize = (int)ceil((sup-inf+1) / (double)5);
+	int* M = new int[MSize];
+	int* MIndex = new int[MSize];
+
+	int j = inf+2;
+	for (i = 0; i < MSize; i++) {
+		M[i] = I[j];
+		MIndex[i] = j;
+		j += 5;
+		if (j > sup)
+			j = sup;
+	}
+	int mOfMediansIndex = kith(M, MSize, MIndex, MSize / 2);
+	int mIndice = partition(I, inf, sup, mOfMediansIndex);
+	long newSumA = sumA;
+	long newSumB = sumB;
+	for(i = mIndice; i <= sup; i++) {
+		ParOrdenado* newAB = &(this->ab[I[i]]);
+		newSumA += newAB->a;
+		newSumB += newAB->b;
+	}
+	int a0 = this->a0b0->a;
+	int b0 = this->a0b0->b;
+	double R = (newSumA + a0) / (double)(newSumB + b0);
+	if (this->ab[I[mIndice]].razao() <= R) {
+		return pph_algoritmo3(I, mIndice + 1, sup, sumA, sumB);
+	} else {
+		if (mIndice >= inf+4) {
+			for(i = mIndice; i <= sup; i++) {
+				this->S->inserir(&(this->ab[I[i]]));
+			}
+			return pph_algoritmo3(I, inf, mIndice - 1, newSumA, newSumB);
+		} else {
+			insertionSort(I, inf, mIndice - 1);
+			for (i = mIndice-1; i >= inf; i--) {
+				ParOrdenado* newAB = &(this->ab[I[i]]);
+				if (newAB->razao() > R) {
+					this->S->inserir(newAB);
+					newSumA += newAB->a;
+					newSumB += newAB->b;
+				}
+			}
+			return R;
+		}
+	}
+}
+
+
+void Instancia::insertionSort(int* I, int inf, int sup) {
+	double value;
+	int index;
+	int j;
+	for (int i = inf; i <= sup; i++) {
+		value = this->ab[I[i]].razao();
+		index = I[i];
+		j = i;
+		while ((j > inf) && (this->ab[I[j - 1]].razao() > value)) {
+			I[j] = I[j - 1];
+			j = j - 1;
+	    }
+		I[j] = index;
+	}
+}
+
+int Instancia::kith(int* M, int tamanhoM, int* MIndex, int k) {
+	// TODO Fazer implementação correta!
+
+	double value;
+	int index, iIndex;
+	int j;
+	for (int i = 0; i < tamanhoM; i++) {
+		value = this->ab[M[i]].razao();
+		index = M[i];
+		iIndex = MIndex[i];
+		j = i;
+		while ((j > 0) && (this->ab[M[j - 1]].razao() > value)) {
+			M[j] = M[j - 1];
+			MIndex[j] = MIndex[j - 1];
+			j = j - 1;
+	    }
+		M[j] = index;
+		MIndex[j] = iIndex;
+	}
+
+	return MIndex[k];
+}
+
+int Instancia::partition(int* I, int inf, int sup, int pivot) {
+	int min = inf, max = sup;
+
+	int pivotValue = I[pivot];
+	I[pivot] = I[max];
+	I[max] = pivotValue;
+	int storeIndex = min;
+
+	while(min < max) {
+		if (this->ab[I[min]].razao() <= this->ab[pivotValue].razao()) {
+			int temp = I[min];
+			I[min] = I[storeIndex];
+			I[storeIndex] = temp;
+			storeIndex++;
+		}
+		min++;
+	}
+	I[max] = I[storeIndex];
+	I[storeIndex] = pivotValue;
+
+	return storeIndex;
+}
+
 
 // Primeira chamada: pph_alg4(a0, b0, n, a, b, a0/b0, 0);
 double Instancia::pph_algoritmo4() {

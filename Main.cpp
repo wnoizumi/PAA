@@ -108,13 +108,13 @@ int main(int argc, char **argv) {
 		printf("%d pares lidos.\n", n);
 	} else {
 		printf("Sintaxe: PPH <nome do arquivo>\nDemonstração com instância de teste:\n");
-		n = 4;
-		a0b0->a = 132;
-		a0b0->b = 434;
+		n = 15;
+		a0b0->a = 334;
+		a0b0->b = 563;
 		ab = new ParOrdenado[n];
-		int a[] = { 132, 461, 10, 130 };
-		int b[] = { 563, 874, 581, 84 };
-		for (int i = 0; i < 4; i++) {
+		int a[] = {272, 249, 74, 188, 186, 77, 263, 323, 100, 132, 132, 461, 10, 130, 217};
+		int b[] = {874, 581, 84, 743, 820, 42, 949,  37, 936, 424,  39, 758, 83, 286, 453};
+		for (int i = 0; i < n; i++) {
 			ab[i].a = a[i];
 			ab[i].b = b[i];
 		}
@@ -184,6 +184,10 @@ int main(int argc, char **argv) {
 //	r = pph_algoritmo4(a0b0, n, ab, a0b0->razao(), 0);
 
 	printf("R = %f\n", r);
+	if (n <= 16) {
+		printf("S* = ");
+		imprime_pares(I4.S);
+	}
 
 	printf("\n");
 

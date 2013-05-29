@@ -131,6 +131,7 @@
 			<resource resourceType="PROJECT" workspacePath="/PPH"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.975255306;cdt.managedbuild.config.gnu.exe.debug.975255306.;cdt.managedbuild.tool.gnu.c.compiler.exe.debug.256815817;cdt.managedbuild.tool.gnu.c.compiler.input.676498725">
@@ -139,12 +140,5 @@
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.58873147;cdt.managedbuild.config.gnu.exe.release.58873147.;cdt.managedbuild.tool.gnu.c.compiler.exe.release.677353858;cdt.managedbuild.tool.gnu.c.compiler.input.814235339">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.975255306;cdt.managedbuild.config.gnu.exe.debug.975255306.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1458210145;cdt.managedbuild.tool.gnu.cpp.compiler.input.166440739">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.58873147;cdt.managedbuild.config.gnu.exe.release.58873147.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1339214801;cdt.managedbuild.tool.gnu.cpp.compiler.input.1750459815">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
