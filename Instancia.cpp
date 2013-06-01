@@ -120,6 +120,7 @@ double Instancia::pph_algoritmo2() {
 }
 
 double Instancia::pph_algoritmo3() {
+	//Vetor I é preenchido com os "indices" originais do vetor ab
 	int* I = new int[this->n];
 	for (int i = 0; i < this->n; i++) {
 		I[i] = i;
@@ -129,8 +130,35 @@ double Instancia::pph_algoritmo3() {
 	return r;
 }
 
+/*
+ * I: vetor contendo os indices originais do vetor ab
+ * inf: indice inicial em I para a execucao do algoritmo
+ * sup: indice final em I para a execucao do algoritmo
+ * SumA: Somatorio acumulado de a
+ * SumB: Somatorio acumulado de b
+ */
 double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB) {
+	int a0 = this->a0b0->a;
+	int b0 = this->a0b0->b;
+
+	if (sup-inf+1 < 5) {
+		//quantidade de pares menores do que o pivot inferior a 5
+		//o algoritmo é finalizado, incluindo os pares que possuem razao maior do que R
+		insertionSort(I, inf, sup);
+		for (int i = sup; i >= inf; i--) {
+			double R = (sumA + a0) / (float)(sumB + b0);
+			ParOrdenado* newAB = &(this->ab[I[i]]);
+			if (newAB->razao() > R) {
+				this->Sx = this->Sx->inserir(newAB);
+				sumA += newAB->a;
+				sumB += newAB->b;
+			}
+		}
+		return (sumA + a0) / (float)(sumB + b0);
+	}
+
 	int i = inf;
+	//divisão e ordenação da entrada em "pedaços" de tamanho 5
 	while (i < sup) {
 		int l = i+4;
 		if (l > sup)
@@ -139,11 +167,13 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 		i = i + 5;
 	}
 
-	int MSize = (int)ceil((sup-inf+1) / (double)5);
+	float t1 = (sup-inf+1);
+	float t2 = t1 / 5;
+	int MSize = (int)ceil(t2);
 	int* M = new int[MSize];
 	int* MIndex = new int[MSize];
-
 	int j = inf+2;
+	//criação e preenchimento de vetor com as medianas de cada parte ordenado
 	for (i = 0; i < MSize; i++) {
 		M[i] = I[j];
 		MIndex[i] = j;
@@ -151,38 +181,32 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 		if (j > sup)
 			j = sup;
 	}
-	int mOfMediansIndex = kith(M, MSize, MIndex, MSize / 2);
+	//chamada ao algoritmo do k-esimo para encontrar a mediana das medianas
+	int mOfMediansIndex = kth(M, 0, MSize-1, MIndex, (int)ceil(MSize / (float)2));
+	delete M;
+	delete MIndex;
+	//particao do vetor I, usando como pivot a mediana das medianas
 	int mIndice = partition(I, inf, sup, mOfMediansIndex);
 	long newSumA = sumA;
 	long newSumB = sumB;
+	//Calculo do somatorio de A e B para o trecho de I que contem os pares maiores do que o pivot
 	for(i = mIndice; i <= sup; i++) {
 		ParOrdenado* newAB = &(this->ab[I[i]]);
 		newSumA += newAB->a;
 		newSumB += newAB->b;
 	}
-	int a0 = this->a0b0->a;
-	int b0 = this->a0b0->b;
-	double R = (newSumA + a0) / (double)(newSumB + b0);
+	//calculo do R com base nos somatorios obtidos para os pares maiores do que o pivot
+	double R = (newSumA + a0) / (float)(newSumB + b0);
 	if (this->ab[I[mIndice]].razao() <= R) {
+		//razao do pivot inferior ou igual ao R: chama-se o algoritmo recursivamente para os pares maiores do que o pivot
 		return pph_algoritmo3(I, mIndice + 1, sup, sumA, sumB);
 	} else {
-		if (mIndice >= inf+4) {
-			for(i = mIndice; i <= sup; i++) {
-				this->Sx = this->Sx->inserir(&(this->ab[I[i]]));
-			}
-			return pph_algoritmo3(I, inf, mIndice - 1, newSumA, newSumB);
-		} else {
-			insertionSort(I, inf, mIndice - 1);
-			for (i = mIndice-1; i >= inf; i--) {
-				ParOrdenado* newAB = &(this->ab[I[i]]);
-				if (newAB->razao() > R) {
-					this->Sx = this->Sx->inserir(newAB);
-					newSumA += newAB->a;
-					newSumB += newAB->b;
-				}
-			}
-			return (newSumA + a0) / (double)(newSumB + b0);
+		//razao do pivot maior do que R: os pares maiores ou iguais ao pivot são adicionados em S
+		for(i = mIndice; i <= sup; i++) {
+			this->Sx = this->Sx->inserir(&(this->ab[I[i]]));
 		}
+		//em seguida é feita uma chamada recursiva ao algoritmo para os pares menores do que o pivot
+		return pph_algoritmo3(I, inf, mIndice - 1, newSumA, newSumB);
 	}
 }
 
@@ -203,27 +227,75 @@ void Instancia::insertionSort(int* I, int inf, int sup) {
 	}
 }
 
-int Instancia::kith(int* M, int tamanhoM, int* MIndex, int k) {
-	// TODO Fazer implementa��o correta!
-
-	double value;
-	int index, iIndex;
-	int j;
-	for (int i = 0; i < tamanhoM; i++) {
-		value = this->ab[M[i]].razao();
-		index = M[i];
-		iIndex = MIndex[i];
-		j = i;
-		while ((j > 0) && (this->ab[M[j - 1]].razao() > value)) {
-			M[j] = M[j - 1];
-			MIndex[j] = MIndex[j - 1];
-			j = j - 1;
-	    }
-		M[j] = index;
-		MIndex[j] = iIndex;
+int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
+	int i = inf;
+	//divisão e ordenação da entrada em "pedaços" de tamanho 5
+	while (i < sup) {
+		int l = i+4;
+		if (l > sup)
+			l = sup;
+		insertionSort(I, i, l);
+		i = i + 5;
 	}
 
-	return MIndex[k];
+	float t1 = (sup-inf+1);
+	float t2 = t1 / 5;
+	int MSize = (int)ceil(t2);
+	int* M = new int[MSize];
+	int* MIndex = new int[MSize];
+	int j = 2;
+	//criação e preenchimento de vetor com as medianas de cada parte ordenado
+	for (i = 0; i < MSize; i++) {
+		M[i] = I[j];
+		MIndex[i] = j;
+		j += 5;
+		if (j > sup)
+			j = sup;
+	}
+
+	int mOfMediansIndex = MSize > 1 ? kth(M, 0, MSize-1, MIndex, (int)ceil(MSize / 2)) : MIndex[0];
+
+	delete M;
+	delete MIndex;
+	//particao do vetor I, usando como pivot a mediana das medianas
+	int mIndice = kthPartition(I, 0, sup, IIndex, mOfMediansIndex);
+
+	if (mIndice+1 == k) {
+		return IIndex[mIndice];
+	} else if (k < mIndice+1)
+		return kth(I, inf, mIndice-1, IIndex, k);
+	return kth(I, mIndice+1, sup, IIndex, k);
+}
+
+int Instancia::kthPartition(int* I, int inf, int sup, int* IIndex, int pivot) {
+	int min = inf, max = sup;
+
+	int pivotValue = I[pivot];
+	int pivotIndex = IIndex[pivot];
+	I[pivot] = I[max];
+	IIndex[pivot] = IIndex[max];
+	I[max] = pivotValue;
+	IIndex[max] = pivotIndex;
+	int storeIndex = min;
+
+	while(min < max) {
+		if (this->ab[I[min]].razao() <= this->ab[pivotValue].razao()) {
+			int tempValue = I[min];
+			int tempIndex = IIndex[min];
+			I[min] = I[storeIndex];
+			IIndex[min] = IIndex[storeIndex];
+			I[storeIndex] = tempValue;
+			IIndex[storeIndex] = tempIndex;
+			storeIndex++;
+		}
+		min++;
+	}
+	I[max] = I[storeIndex];
+	IIndex[max] = IIndex[storeIndex];
+	I[storeIndex] = pivotValue;
+	IIndex[storeIndex] = pivotIndex;
+
+	return storeIndex;
 }
 
 int Instancia::partition(int* I, int inf, int sup, int pivot) {
