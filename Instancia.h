@@ -29,8 +29,9 @@ private:
 	ListaEncadeada* Sx;
 	double pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB);
 	void insertionSort(int* I, int inf, int sup);
-	int kith(int* M, int tamanhoM, int* MIndex, int MSizeSobreDois);
+	int kth(int* I, int inf, int sup, int* IIndex, int k);
 	int partition(int* I, int inf, int sup, int mOfMediansIndex);
+	int kthPartition(int* I, int inf, int sup, int* IIndex, int pivot);
 	double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int indiceInicial);
 };
 
