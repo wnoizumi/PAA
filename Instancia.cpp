@@ -45,7 +45,6 @@ double Instancia::calcula_R() {
 }
 
 double Instancia::pph_algoritmo1() {
-
 	/* "... inicia com R = a0 / b0..." */
 	double R = a0b0->razao();
 	int sizeS = 0;
@@ -68,18 +67,17 @@ double Instancia::pph_algoritmo1() {
 
 			// "... e repete o teste."
 			ListaEncadeada *x = S;
-			ListaEncadeada *y = NULL;
-			while (x->proximo != NULL) {
-				y = x;
-				x = x->proximo;
+			ListaEncadeada *y = S;
+			while (y != NULL && y->proximo != NULL) {
+				x = y->proximo;
 				double r = x->valor->razao();
 				// "... Se existir um elemento em S que não satisfaz
 				//  as condições do lema..."
 				if (r < R) {
 					// "... este elemento deve ser removido."
-					x = y->removerProximo();
-//					x = x->remover(x);
-//					sizeS = sizeS - 1;
+					y->removerProximo();
+				} else {
+					y = y->proximo;
 				}
 			}
 		}
@@ -89,7 +87,6 @@ double Instancia::pph_algoritmo1() {
 
 
 double Instancia::pph_algoritmo2() {
-
 	/* "... inicia com R = a0 / b0..." */
 	double R = a0b0->razao();
 	int sizeS = 0;
@@ -103,7 +100,6 @@ double Instancia::pph_algoritmo2() {
 	for (int k = 0; k < n; k++) {
 		ParOrdenado *akbk = ab + k;
 		double r = akbk->razao();
-
 		// "... No caso afirmativo..."
 		if (r > R) {
 			// "... inclui o par no conjunto S..."
@@ -238,7 +234,7 @@ int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
 		i = i + 5;
 	}
 
-	if (sup-inf + 1 <= 5)
+	if (sup - inf + 1 <= 5)
 		return I[k];
 
 	int j = 2;
@@ -343,51 +339,48 @@ int Instancia::partition(int* I, int inf, int sup, int pivot) {
 	return storeIndex;
 }
 
-// Primeira chamada: pph_alg4(a0, b0, n, a, b, a0/b0, 0);
 double Instancia::pph_algoritmo4() {
-	return this->pph_algoritmo4(this->a0b0, n, this->ab, this->a0b0->razao(), 0);
+	//Vetor I é preenchido com os "indices" originais do vetor ab
+	int I[this->n];
+	for (int i = 0; i < this->n; i++) {
+		I[i] = i;
+	}
+
+	//primeira chamada passando a razão do par a0b0 (único par em S)
+	return this->pph_algoritmo4(this->a0b0->razao(), 0, I);
 }
 
-// Primeira chamada: pph_alg4(a0, b0, n, a, b, a0/b0, 0);
-double Instancia::pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int indiceInicial) {
+double Instancia::pph_algoritmo4(double R, int indiceInicial, int* I) {
+	int inf = indiceInicial;
+	int sup = n - 1;
 
-	int p_inicio = indiceInicial;
-	int p_fim = n - 1;
-
-	while (p_inicio < p_fim) {
-		ParOrdenado *apbp = ab + p_inicio;
-		double r = apbp->razao();
+	//partição do vetor I usando como pivot a razão R
+	while (inf < sup) {
+		double r = this->ab[I[inf]].razao();
 		if (r > R) {
-			ParOrdenado *ab_inicio = ab + p_inicio;
-			ParOrdenado *ab_fim = ab + p_fim;
-			ParOrdenado *temp = new ParOrdenado();
-
-			temp->a = ab_fim->a;
-			temp->b = ab_fim->b;
-			ab_fim->a = ab_inicio->a;
-			ab_fim->b = ab_inicio->b;
-			ab_inicio->a = temp->a;
-			ab_inicio->b = temp->b;
-
-			delete temp;
-			p_fim--;
+			int temp = I[sup];
+			I[sup] = I[inf];
+			I[inf] = temp;
+			sup--;
 		} else {
-			p_inicio++;
+			inf++;
 		}
 	}
 
-	if (p_inicio == indiceInicial) {
+	//quando inf é igual a indiceInicial significa que o particionamento não movimentou nenhum par
+	//portanto o conjunto S já está completo
+	if (inf == indiceInicial) {
 		return R;
 	} else {
+		//cálculo do novo R para a próxima recursão
 		ParOrdenado *soma = new ParOrdenado(a0b0);
-
-		for (int i = p_inicio; i < n; i++) {
-			soma->a = soma->a + (ab + i)->a;
-			soma->b = soma->b + (ab + i)->b;
+		for (int i = inf; i < this->n; i++) {
+			soma->a += this->ab[I[i]].a;
+			soma->b += this->ab[I[i]].b;
 		}
 		double r = soma->razao();
 		delete soma;
 
-		return pph_algoritmo4(this->a0b0, this->n, this->ab, r, p_inicio);
+		return pph_algoritmo4(r, inf, I);
 	}
 }

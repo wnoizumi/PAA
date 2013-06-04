@@ -107,8 +107,8 @@ int carregaEntrada(int argc, char **argv) {
 	a0b0 = new ParOrdenado();
 	ab = NULL;
 
-	if (argc == 2) {
-		char *nomeArquivo = argv[1];
+	if (argc >= 3) {
+		char *nomeArquivo = (argv[1] + 2);
 		FILE *arquivo = NULL;
 		printf("Lendo instâncias de \"%s\"... ", nomeArquivo);
 		arquivo = fopen(nomeArquivo, "r");
@@ -169,7 +169,7 @@ int carregaEntrada(int argc, char **argv) {
 		fclose(arquivo);
 		printf("%d pares lidos.\n", n);
 	} else {
-		printf("Sintaxe: PPH <nome do arquivo>\nDemonstração com instância de teste:\n");
+		printf("Sintaxe: PPH <numero do algoritmo> <nome do arquivo>\nDemonstração com instância de teste:\n");
 		n = 15;
 		a0b0->a = 334;
 		a0b0->b = 563;
@@ -196,7 +196,21 @@ int main(int argc, char **argv) {
 	printf("PPH\n");
 
 	if (carregaEntrada(argc, argv) == EXIT_SUCCESS) {
-		algoritmo3();
+		char algo = argv[1][0];
+		switch(algo) {
+			case '1':
+				algoritmo1();
+				break;
+			case '2':
+				algoritmo2();
+				break;
+			case '3':
+				algoritmo3();
+				break;
+			case '4':
+				algoritmo4();
+				break;
+		}
 	}
 
 	printf("\n");
