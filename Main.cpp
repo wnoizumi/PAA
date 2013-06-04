@@ -41,67 +41,6 @@ void imprime_pares(ListaEncadeada *l) {
 	printf(" }");
 }
 
-void algoritmo1() {
-	printf("\nALGORITMO 1\n");
-
-	Instancia I1 = Instancia(a0b0, n, ab);
-	double r = I1.pph_algoritmo1();
-	double R = I1.calcula_R();
-
-	printf("r = %f, R = %f\n", r, R);
-	if (n <= 16) {
-		printf("S* = ");
-		imprime_pares(I1.S);
-	}
-
-	printf("\n");
-}
-
-void algoritmo2() {
-	printf("\nALGORITMO 2\n");
-
-	Instancia I2 = Instancia(a0b0, n, ab);
-	double r = I2.pph_algoritmo2();
-	double R = I2.calcula_R();
-
-	printf("r = %f, R = %f\n", r, R);
-	if (n <= 16) {
-		printf("S* = ");
-		imprime_pares(I2.S);
-	}
-
-	printf("\n");
-}
-
-void algoritmo3() {
-	printf("\nALGORITMO 3\n");
-
-	Instancia I3 = Instancia(a0b0, n, ab);
-	double r = I3.pph_algoritmo3();
-	double R = I3.calcula_R();
-
-	printf("r = %f, R = %f\n", r, R);
-	if (n <= 16) {
-		printf("S* = ");
-		imprime_pares(I3.S);
-	}
-
-	printf("\n");
-}
-
-void algoritmo4() {
-	printf("\nALGORITMO 4\n");
-
-	Instancia I4 = Instancia(a0b0, n, ab);
-	double r = I4.pph_algoritmo4();
-
-	printf("R = %f\n", r);
-	if (n <= 16) {
-		printf("S* = ");
-		imprime_pares(I4.S);
-	}
-}
-
 int carregaEntrada(int argc, char **argv) {
 	n = 0;
 	a0b0 = new ParOrdenado();
@@ -192,25 +131,46 @@ int carregaEntrada(int argc, char **argv) {
 	return EXIT_SUCCESS;
 }
 
+double executaAlgoritmo(char algo) {
+	Instancia a = Instancia(a0b0, n, ab);
+	switch(algo) {
+		case '1':
+			return a.pph_algoritmo1();
+			break;
+		case '2':
+			return a.pph_algoritmo2();
+			break;
+		case '3':
+			return a.pph_algoritmo3();
+			break;
+		case '4':
+			return a.pph_algoritmo4();
+			break;
+	}
+	return 0;
+}
+
 int main(int argc, char **argv) {
-	printf("PPH\n");
+	printf("\nPPH");
 
 	if (carregaEntrada(argc, argv) == EXIT_SUCCESS) {
 		char algo = argv[1][0];
-		switch(algo) {
-			case '1':
-				algoritmo1();
-				break;
-			case '2':
-				algoritmo2();
-				break;
-			case '3':
-				algoritmo3();
-				break;
-			case '4':
-				algoritmo4();
-				break;
-		}
+		printf("\nAlgoritmo %c", algo);
+		CPUTimer totaltime;
+		totaltime.reset();
+		int k = 0;
+		double R = 0;
+		do {
+			totaltime.start();
+
+			R = executaAlgoritmo(algo);
+
+			k++;
+			totaltime.stop();
+		} while ( totaltime.getCPUTotalSecs() < 5.0 );
+
+		printf("\nR = %lf", R);
+		printf("\nT CPU:   %lf   k=%d  ttotal:%lf\n", totaltime.getCPUTotalSecs() / k , k, totaltime.getCPUTotalSecs());
 	}
 
 	printf("\n");
