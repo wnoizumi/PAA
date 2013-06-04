@@ -235,13 +235,8 @@ int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
 		i = i + 5;
 	}
 
-	//if (sup - inf + 1 <= 5)
-	//	return IIndex[k];
-
 	int j = inf + 2;
 	int MSize = (int)floor((sup-inf+1) / 5);
-	//if (MSize < 1)
-	//	return IIndex[j];
 
 	int M[MSize];
 	int MIndex[MSize];
@@ -258,11 +253,11 @@ int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
 	int mOfMediansIndex = MSize > 1 ? kth(M, 0, MSize-1, MIndex, mk) : MIndex[0];
 
 	//particao do vetor I, usando como pivot a mediana das medianas
-	int mIndice = kthPartition(I, 0, sup, IIndex, mOfMediansIndex);
+	int mIndice = kthPartition(I, inf, sup, IIndex, mOfMediansIndex);
 
-	if (mIndice+1 == k) {
+	if (mIndice == k) {
 		return IIndex[mIndice];
-	} else if (k < mIndice+1)
+	} else if (k < mIndice)
 		return kth(I, inf, mIndice-1, IIndex, k);
 	return kth(I, mIndice+1, sup, IIndex, k);
 }
@@ -289,9 +284,6 @@ void Instancia::kthInsertionSort(int* I, int inf, int sup, int* IIndex) {
 int Instancia::kthPartition(int* I, int inf, int sup, int* IIndex, int pivot) {
 	int min = inf, max = sup;
 
-	if (pivot < 0 || pivot > sup) {
-		printf("pivot: %d", pivot);
-	}
 	int pivotValue = I[pivot];
 	int pivotIndex = IIndex[pivot];
 	I[pivot] = I[max];
