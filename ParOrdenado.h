@@ -7,11 +7,13 @@
 
 #ifndef PARORDENADO_H_
 #define PARORDENADO_H_
+#define INFINITO 2000.0;
 
 class ParOrdenado {
+
 public:
-	int a;
-	int b;
+	long a;
+	long b;
 	ParOrdenado();
 //	ParOrdenado(int valor_a, int valor_b);
 	ParOrdenado(ParOrdenado* outroPar);

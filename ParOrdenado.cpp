@@ -18,5 +18,8 @@ ParOrdenado::ParOrdenado(ParOrdenado* outroPar) {
 }
 
 double ParOrdenado::razao() {
-	return ((double) this->a) / this->b;
+	if (this->b > 0) {
+		return ((double) this->a) / this->b;
+	}
+	return INFINITO;
 }

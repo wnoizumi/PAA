@@ -31,6 +31,7 @@ private:
 	void insertionSort(int* I, int inf, int sup);
 	int kth(int* I, int inf, int sup, int* IIndex, int k);
 	int partition(int* I, int inf, int sup, int mOfMediansIndex);
+	void kthInsertionSort(int* I, int inf, int sup, int* IIndex);
 	int kthPartition(int* I, int inf, int sup, int* IIndex, int pivot);
 	double pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, double R, int indiceInicial);
 };

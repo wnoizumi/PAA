@@ -121,12 +121,11 @@ double Instancia::pph_algoritmo2() {
 
 double Instancia::pph_algoritmo3() {
 	//Vetor I é preenchido com os "indices" originais do vetor ab
-	int* I = new int[this->n];
+	int I[this->n];
 	for (int i = 0; i < this->n; i++) {
 		I[i] = i;
 	}
 	double r = this->pph_algoritmo3(I, 0, this->n - 1, 0, 0);
-	delete I;
 	return r;
 }
 
@@ -170,8 +169,8 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 	float t1 = (sup-inf+1);
 	float t2 = t1 / 5;
 	int MSize = (int)ceil(t2);
-	int* M = new int[MSize];
-	int* MIndex = new int[MSize];
+	int M[MSize];
+	int MIndex[MSize];
 	int j = inf+2;
 	//criação e preenchimento de vetor com as medianas de cada parte ordenado
 	for (i = 0; i < MSize; i++) {
@@ -183,15 +182,16 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 	}
 	//chamada ao algoritmo do k-esimo para encontrar a mediana das medianas
 	int mOfMediansIndex = kth(M, 0, MSize-1, MIndex, (int)ceil(MSize / (float)2));
-	delete M;
-	delete MIndex;
+	//delete M;
+	//delete MIndex;
 	//particao do vetor I, usando como pivot a mediana das medianas
 	int mIndice = partition(I, inf, sup, mOfMediansIndex);
 	long newSumA = sumA;
 	long newSumB = sumB;
 	//Calculo do somatorio de A e B para o trecho de I que contem os pares maiores do que o pivot
+	ParOrdenado* newAB = NULL;
 	for(i = mIndice; i <= sup; i++) {
-		ParOrdenado* newAB = &(this->ab[I[i]]);
+		newAB = &(this->ab[I[i]]);
 		newSumA += newAB->a;
 		newSumB += newAB->b;
 	}
@@ -234,16 +234,21 @@ int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
 		int l = i+4;
 		if (l > sup)
 			l = sup;
-		insertionSort(I, i, l);
+		kthInsertionSort(I, i, l, IIndex);
 		i = i + 5;
 	}
 
-	float t1 = (sup-inf+1);
-	float t2 = t1 / 5;
-	int MSize = (int)ceil(t2);
-	int* M = new int[MSize];
-	int* MIndex = new int[MSize];
+	if (sup-inf + 1 <= 5)
+		return I[k];
+
 	int j = 2;
+	float t2 = (sup-inf+1) / 5;
+	int MSize = (int)floor(t2);
+	if (MSize <= 1)
+		return I[j];
+
+	int M[MSize];
+	int MIndex[MSize];
 	//criação e preenchimento de vetor com as medianas de cada parte ordenado
 	for (i = 0; i < MSize; i++) {
 		M[i] = I[j];
@@ -255,8 +260,6 @@ int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
 
 	int mOfMediansIndex = MSize > 1 ? kth(M, 0, MSize-1, MIndex, (int)ceil(MSize / 2)) : MIndex[0];
 
-	delete M;
-	delete MIndex;
 	//particao do vetor I, usando como pivot a mediana das medianas
 	int mIndice = kthPartition(I, 0, sup, IIndex, mOfMediansIndex);
 
@@ -265,6 +268,25 @@ int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
 	} else if (k < mIndice+1)
 		return kth(I, inf, mIndice-1, IIndex, k);
 	return kth(I, mIndice+1, sup, IIndex, k);
+}
+
+void Instancia::kthInsertionSort(int* I, int inf, int sup, int* IIndex) {
+	double value;
+	int index, iIndex;
+	int j;
+	for (int i = inf; i <= sup; i++) {
+		value = this->ab[I[i]].razao();
+		index = I[i];
+		iIndex = IIndex[i];
+		j = i;
+		while ((j > 0) && (this->ab[I[j - 1]].razao() > value)) {
+			I[j] = I[j - 1];
+			IIndex[j] = IIndex[j - 1];
+			j = j - 1;
+	    }
+		I[j] = index;
+		IIndex[j] = iIndex;
+	}
 }
 
 int Instancia::kthPartition(int* I, int inf, int sup, int* IIndex, int pivot) {
@@ -279,7 +301,7 @@ int Instancia::kthPartition(int* I, int inf, int sup, int* IIndex, int pivot) {
 	int storeIndex = min;
 
 	while(min < max) {
-		if (this->ab[I[min]].razao() <= this->ab[pivotValue].razao()) {
+		if (this->ab[I[min]].razao() <= this->ab[I[pivot]].razao()) {
 			int tempValue = I[min];
 			int tempIndex = IIndex[min];
 			I[min] = I[storeIndex];
@@ -321,7 +343,6 @@ int Instancia::partition(int* I, int inf, int sup, int pivot) {
 	return storeIndex;
 }
 
-
 // Primeira chamada: pph_alg4(a0, b0, n, a, b, a0/b0, 0);
 double Instancia::pph_algoritmo4() {
 	return this->pph_algoritmo4(this->a0b0, n, this->ab, this->a0b0->razao(), 0);
@@ -358,7 +379,6 @@ double Instancia::pph_algoritmo4(ParOrdenado *a0b0, int n, ParOrdenado *ab, doub
 	if (p_inicio == indiceInicial) {
 		return R;
 	} else {
-//		ParOrdenado soma = ParOrdenado(a0b0->a, a0b0->b);
 		ParOrdenado *soma = new ParOrdenado(a0b0);
 
 		for (int i = p_inicio; i < n; i++) {
