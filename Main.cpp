@@ -49,7 +49,7 @@ int carregaEntrada(char *nomeArquivo) {
 	ab = NULL;
 
 	FILE *arquivo = NULL;
-	printf("Lendo instâncias de \"%s\"... ", nomeArquivo);
+	//printf("Lendo instâncias de \"%s\"... ", nomeArquivo);
 	arquivo = fopen(nomeArquivo, "r");
 	if (arquivo == NULL) {
 		printf("Não foi possível abrir \"%s\".\n", nomeArquivo);
@@ -106,10 +106,10 @@ int carregaEntrada(char *nomeArquivo) {
 	}
 
 	fclose(arquivo);
-	printf("%d pares lidos.\n", n);
+	//printf("%d pares lidos.\n", n);
 
-	printf("n = %d\n", n);
-	printf("(a0, b0) = (%ld, %ld)\n", a0b0->a, a0b0->b);
+	//printf("n = %d\n", n);
+	//printf("(a0, b0) = (%ld, %ld)\n", a0b0->a, a0b0->b);
 
 	return EXIT_SUCCESS;
 }
@@ -133,37 +133,19 @@ double executaAlgoritmo(char algo) {
 	return 0;
 }
 
-void gravarResultado(char algo, char* instancia, double R, CPUTimer totalTime, int k) {
-	FILE *arquivo = NULL;
-	char *nomeArquivo = "resultsPPH";
-	arquivo = fopen(nomeArquivo, "a");
-	if (arquivo == NULL) {
-		printf("Não foi possível abrir \"%s\".\n", nomeArquivo);
-	}
-
-	char buff[200];
-	for (int i = 0; i < 200; ++i) {
-		buff[i] = '\0';
-	}
-	sprintf(buff, "\nalgoritmo %c - instancia: %s T CPU:   %lf   k=%d  ttotal:%lf\n", algo, instancia, totalTime.getCPUTotalSecs() / k , k, totalTime.getCPUTotalSecs());
-
-	fwrite(buff, sizeof(char), sizeof(buff), arquivo);
-	fclose(arquivo);
-}
-
 int main(int argc, char **argv) {
-	printf("\nPPH");
+	//printf("\nPPH");
 
 	if (argc < 3) {
-		printf("Sintaxe: PPH <numero do algoritmo> <nome do arquivo>\nDemonstração com instância de teste:\n");
+		printf("Sintaxe: PPH <numero do algoritmo> <nome do arquivo>\n");
 		return EXIT_FAILURE;
 	}
 
 	char algo = argv[1][0];
-	char *nomeArquivo = argv[1] + 3;
+	char *nomeArquivo = argv[1] + 2;
 
 	if (carregaEntrada(nomeArquivo) == EXIT_SUCCESS) {
-		printf("\nAlgoritmo %c", algo);
+		//printf("\nAlgoritmo %c", algo);
 		CPUTimer totalTime;
 		totalTime.reset();
 		int k = 0;
@@ -177,13 +159,13 @@ int main(int argc, char **argv) {
 			totalTime.stop();
 		} while ( totalTime.getCPUTotalSecs() < 5.0 );
 
-		gravarResultado(algo, nomeArquivo, R, totalTime, k);
+		printf("%c;%s;%lf;%d;%lf;%lf;\n", algo, nomeArquivo, totalTime.getCPUTotalSecs() / k , k, totalTime.getCPUTotalSecs(), R);
 
-		printf("\nR = %lf", R);
-		printf("\nT CPU:   %lf   k=%d  ttotal:%lf\n", totalTime.getCPUTotalSecs() / k , k, totalTime.getCPUTotalSecs());
+		//printf("\nR = %lf", R);
+		//printf("\nT CPU:   %lf   k=%d  ttotal:%lf\n", totalTime.getCPUTotalSecs() / k , k, totalTime.getCPUTotalSecs());
 	}
 
-	printf("\n");
+	//printf("\n");
 	delete a0b0;
 	return EXIT_SUCCESS;
 }

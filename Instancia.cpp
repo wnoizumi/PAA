@@ -109,8 +109,6 @@ double Instancia::pph_algoritmo2() {
 			sizeS = sizeS + 1;
 			// "... atualiza o valor de R... "
 			R = this->calcula_R();
-
-			// ... e não precisa repetir o teste.
 		}
 	}
 	return R;
@@ -163,9 +161,7 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 		i = i + 5;
 	}
 
-	float t1 = (sup-inf+1);
-	float t2 = t1 / 5;
-	int MSize = (int)ceil(t2);
+	int MSize = (int)ceil((sup-inf+1) / 5);
 	int M[MSize];
 	int MIndex[MSize];
 	int j = inf+2;
@@ -177,10 +173,14 @@ double Instancia::pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB)
 		if (j > sup)
 			j = sup;
 	}
+
+	int mOfMediansIndex = 0;
 	//chamada ao algoritmo do k-esimo para encontrar a mediana das medianas
-	int mOfMediansIndex = kth(M, 0, MSize-1, MIndex, (int)ceil(MSize / (float)2));
-	//delete M;
-	//delete MIndex;
+	if (MSize > 1)
+		mOfMediansIndex = kth(M, 0, MSize-1, MIndex, (int)ceil(MSize / (float)2));
+	else
+		mOfMediansIndex = MIndex[0];
+
 	//particao do vetor I, usando como pivot a mediana das medianas
 	int mIndice = partition(I, inf, sup, mOfMediansIndex);
 	long newSumA = sumA;
@@ -225,6 +225,10 @@ void Instancia::insertionSort(int* I, int inf, int sup) {
 }
 
 int Instancia::kth(int* I, int inf, int sup, int* IIndex, int k) {
+	if (k < 0 || k > sup) {
+		printf("\nk: %d", k);
+	}
+
 	int i = inf;
 	//divisão e ordenação da entrada em "pedaços" de tamanho 5
 	while (i < sup) {
@@ -282,6 +286,10 @@ void Instancia::kthInsertionSort(int* I, int inf, int sup, int* IIndex) {
 }
 
 int Instancia::kthPartition(int* I, int inf, int sup, int* IIndex, int pivot) {
+	if (pivot < 0 || pivot > sup) {
+		printf("\nk-pivot: %d", pivot);
+	}
+
 	int min = inf, max = sup;
 
 	int pivotValue = I[pivot];
@@ -313,6 +321,10 @@ int Instancia::kthPartition(int* I, int inf, int sup, int* IIndex, int pivot) {
 }
 
 int Instancia::partition(int* I, int inf, int sup, int pivot) {
+	if (pivot < 0 || pivot > sup) {
+		printf("\npivot: %d", pivot);
+	}
+
 	int min = inf, max = sup;
 
 	int pivotValue = I[pivot];
@@ -351,10 +363,10 @@ double Instancia::pph_algoritmo4(double R, int indiceInicial, int* I) {
 	int sup = n - 1;
 
 	//partição do vetor I usando como pivot a razão R
+	int temp = 0;
 	while (inf < sup) {
-		double r = this->ab[I[inf]].razao();
-		if (r > R) {
-			int temp = I[sup];
+		if (this->ab[I[inf]].razao() > R) {
+			temp = I[sup];
 			I[sup] = I[inf];
 			I[inf] = temp;
 			sup--;
@@ -374,9 +386,8 @@ double Instancia::pph_algoritmo4(double R, int indiceInicial, int* I) {
 			soma->a += this->ab[I[i]].a;
 			soma->b += this->ab[I[i]].b;
 		}
-		double r = soma->razao();
-		delete soma;
 
-		return pph_algoritmo4(r, inf, I);
+		R = soma->razao();
+		return pph_algoritmo4(R, inf, I);
 	}
 }
