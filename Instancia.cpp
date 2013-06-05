@@ -9,6 +9,7 @@
 #include <cmath>
 #include "Instancia.h"
 #include "MergeSort.h"
+#include "QuickSort.h"
 #include <cstdio>
 
 using namespace std;
@@ -92,17 +93,22 @@ double Instancia::pph_algoritmo2() {
 	double R = a0b0->razao();
 	int sizeS = 0;
 
+	int I[this->n];
+	for (int i = 0; i < this->n; i++) {
+		I[i] = i;
+	}
+
 	// Modificação com relação à primeira versão: ordena antes.
-	merge_sort(ab, n);
+	//merge_sort(ab, n);
+	quickSort(this->ab, I, 0, this->n-1);
 	ListaEncadeada *Sk = S;
 
 	// "... testa repetidamente se existe algum par (ak, bk)
 	//  que satisfaz as condições do lema."
 	for (int k = 0; k < n; k++) {
-		ParOrdenado *akbk = ab + k;
-		double r = akbk->razao();
+		ParOrdenado *akbk = &ab[I[k]];
 		// "... No caso afirmativo..."
-		if (r > R) {
+		if (akbk->razao() > R) {
 			// "... inclui o par no conjunto S..."
 			Sk = Sk->inserir(akbk);
 
