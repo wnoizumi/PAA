@@ -21,5 +21,5 @@ double ParOrdenado::razao() {
 	if (this->b > 0) {
 		return ((double) this->a) / this->b;
 	}
-	return INFINITO;
+	return 30000;
 }

@@ -27,12 +27,12 @@ private:
 	int n;
 	ParOrdenado* ab;
 	ListaEncadeada* Sx;
-	double pph_algoritmo3(int* I, int inf, int sup, long sumA, long sumB);
-	void insertionSort(int* I, int inf, int sup);
-	int kth(int* I, int inf, int sup, int* IIndex, int k);
-	int partition(int* I, int inf, int sup, int mOfMediansIndex);
-	void kthInsertionSort(int* I, int inf, int sup, int* IIndex);
-	int kthPartition(int* I, int inf, int sup, int* IIndex, int pivot);
+	double pph_algoritmo3(ParOrdenado* I, int inf, int sup, long sumA, long sumB);
+	void insertionSort(ParOrdenado* I, int inf, int sup);
+	int partition(ParOrdenado* I, int inf, int sup, int mOfMediansIndex);
+	int kth(ParOrdenado** I, int inf, int sup, int* IIndex, int k);
+	void kthInsertionSort(ParOrdenado** I, int inf, int sup, int* IIndex);
+	int kthPartition(ParOrdenado** I, int inf, int sup, int* IIndex, int pivot);
 	double pph_algoritmo4(double R, int indiceInicial, int* I);
 };
 
